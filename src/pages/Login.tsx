@@ -2,7 +2,6 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { UserCredentials } from "../interfaces/User";
 
@@ -34,16 +33,28 @@ export default function Login() {
 
   const onSubmit = (data: UserCredentials) => {
     console.log("Datos enviados:", data);
-    // Aquí iría la lógica para iniciar sesión
+    // Lógica para iniciar sesión
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="min-h-screen bg-[#281B23] flex flex-col items-center px-4">
+      {/* Título */}
+      <div className="text-center mt-16 font-cookie text-white">
+        <h1 className="text-3xl md:text-5xl max-w-md">
+          ¡Bienvenid@ a Compartiendo Sabores!
+        </h1>
+      </div>
+
+      {/* Formulario */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid place-items-center mt-8 p-4 w-full max-w-md"
+      >
         {/* Campo de correo electrónico */}
-        <div>
-          <label htmlFor="email">Correo Electrónico:</label>
+        <div className="w-full mb-5">
+          <label htmlFor="email" className="text-white mb-2 block text-left">
+            Correo Electrónico:
+          </label>
           <Controller
             name="email"
             control={control}
@@ -57,14 +68,17 @@ export default function Login() {
                 margin="normal"
                 error={!!errors.email}
                 helperText={errors.email?.message}
+                className="bg-white rounded-lg"
               />
             )}
           />
         </div>
 
         {/* Campo de contraseña */}
-        <div>
-          <label htmlFor="password">Contraseña:</label>
+        <div className="w-full mb-10">
+          <label htmlFor="password" className="text-white mb-2 block text-left">
+            Contraseña:
+          </label>
           <Controller
             name="password"
             control={control}
@@ -78,28 +92,30 @@ export default function Login() {
                 margin="normal"
                 error={!!errors.password}
                 helperText={errors.password?.message}
+                className="bg-white rounded-lg"
               />
             )}
           />
         </div>
 
         {/* Botón de iniciar sesión */}
-        <div>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+        <div className="w-full mb-2">
+          <button
+            type="submit"
+            className="w-full h-12 bg-[#D9C9A5] hover:bg-[#F47E68] text-black font-semibold rounded-lg transition-colors duration-300"
+          >
             Iniciar Sesión
-          </Button>
+          </button>
         </div>
 
         {/* Botón de registrarse */}
-        <div>
-          <Button
-            variant="outlined"
-            color="secondary"
-            fullWidth
+        <div className="w-full mb-2">
+          <button
             onClick={() => navigate("/register")}
+            className="w-full h-12 bg-[#D9C9A5] hover:bg-[#F47E68] text-black font-semibold rounded-lg transition-colors duration-300"
           >
             Registrarse
-          </Button>
+          </button>
         </div>
       </form>
     </div>
