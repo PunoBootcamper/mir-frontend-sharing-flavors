@@ -1,9 +1,13 @@
+//src/pages/Login.tsx
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { UserCredentials } from "../interfaces/User";
+import { useLoginMutation } from "../app/apis/compartiendoSabores.api";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../app/store/authSlice";
 
 const loginSchema = yup.object({
   email: yup
@@ -18,6 +22,8 @@ const loginSchema = yup.object({
 
 export default function Login() {
   const navigate = useNavigate();
+  const [login] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const {
     control,
@@ -31,9 +37,18 @@ export default function Login() {
     },
   });
 
-  const onSubmit = (data: UserCredentials) => {
-    console.log("Datos enviados:", data);
-    // Lógica para iniciar sesión
+  const onSubmit = async (data: UserCredentials) => {
+    try {
+      console.log("Datos enviados:", data);
+      const response = await login(data).unwrap();
+
+      console.log("Respuesta:", response);
+
+      dispatch(loginSuccess(response));
+      navigate("/home");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (

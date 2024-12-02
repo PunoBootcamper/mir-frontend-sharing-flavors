@@ -4,10 +4,11 @@ import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/User";
+import { useCreateUserMutation } from "../app/apis/compartiendoSabores.api";
 
 const registerSchema = yup.object({
-  name: yup.string().required("Nombre es requerido"),
-  lastName: yup.string().required("Apellido es requerido"),
+  first_name: yup.string().required("Nombre es requerido"),
+  last_name: yup.string().required("Apellido es requerido"),
   email: yup
     .string()
     .email("Debe ser un correo válido")
@@ -24,6 +25,7 @@ const registerSchema = yup.object({
 
 export default function Register() {
   const navigate = useNavigate();
+  const [createUser] = useCreateUserMutation();
   const {
     control,
     handleSubmit,
@@ -31,17 +33,23 @@ export default function Register() {
   } = useForm({
     resolver: yupResolver(registerSchema),
     defaultValues: {
-      name: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = (data: Partial<User>) => {
-    console.log("Datos enviados:", data);
-    navigate("/home");
+  const onSubmit = async (data: Partial<User>) => {
+    try {
+      data.role = "USER";
+      console.log("Datos enviados:", data);
+      await createUser(data).unwrap();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -57,13 +65,13 @@ export default function Register() {
           {/* Campo de nombre */}
           <div>
             <label
-              htmlFor="name"
+              htmlFor="first_name"
               className="block text-sm font-medium text-white"
             >
               Nombre:
             </label>
             <Controller
-              name="name"
+              name="first_name"
               control={control}
               render={({ field }) => (
                 <TextField
@@ -72,8 +80,8 @@ export default function Register() {
                   placeholder="Ingresa tu nombre"
                   fullWidth
                   margin="normal"
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
+                  error={!!errors.first_name}
+                  helperText={errors.first_name?.message}
                   className="bg-white rounded-lg"
                 />
               )}
@@ -83,23 +91,23 @@ export default function Register() {
           {/* Campo de apellido */}
           <div>
             <label
-              htmlFor="lastName"
+              htmlFor="last_name"
               className="block text-sm font-medium text-white"
             >
               Apellido:
             </label>
             <Controller
-              name="lastName"
+              name="last_name"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
-                  id="lastName"
+                  id="last_name"
                   placeholder="Ingresa tu apellido"
                   fullWidth
                   margin="normal"
-                  error={!!errors.lastName}
-                  helperText={errors.lastName?.message}
+                  error={!!errors.last_name}
+                  helperText={errors.last_name?.message}
                   className="bg-white rounded-lg"
                 />
               )}
