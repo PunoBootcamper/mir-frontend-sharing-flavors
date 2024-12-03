@@ -24,7 +24,7 @@ const categories: Category[] = [
     path: "/category/entradas",
   },
   {
-    src: "https://www.lima2019.pe/sites/default/files/inline-images/preview-gallery-004_0.jpg",
+    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfoK8qCQFjpqOj4if05AZGCTUFgy4cvdAeUw&s",
     title: "Platos Fuertes",
     path: "/category/platos-fuertes",
   },
