@@ -8,6 +8,7 @@ import { UserCredentials } from "../interfaces/User";
 import { useLoginMutation } from "../app/apis/compartiendoSabores.api";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../app/store/authSlice";
+import MyButton from "../componentes/ui/MyButton";
 
 const loginSchema = yup.object({
   email: yup
@@ -22,7 +23,7 @@ const loginSchema = yup.object({
 
 export default function Login() {
   const navigate = useNavigate();
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
 
   const {
@@ -115,12 +116,7 @@ export default function Login() {
 
         {/* Botón de iniciar sesión */}
         <div className="w-full mb-2">
-          <button
-            type="submit"
-            className="w-full h-12 bg-[#D9C9A5] hover:bg-[#F47E68] text-black font-semibold rounded-lg transition-colors duration-300"
-          >
-            Iniciar Sesión
-          </button>
+          <MyButton isLoading={isLoading} text="Iniciar Sesión" />
         </div>
 
         {/* Botón de registrarse */}

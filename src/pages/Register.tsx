@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/User";
 import { useCreateUserMutation } from "../app/apis/compartiendoSabores.api";
+import MyButton from "../componentes/ui/MyButton";
 
 const registerSchema = yup.object({
   first_name: yup.string().required("Nombre es requerido"),
@@ -194,14 +195,8 @@ export default function Register() {
               )}
             />
           </div>
-
           {/* Botón de registrarse */}
-          <button
-            type="submit"
-            className="w-full py-3 bg-[#D9C9A5] hover:bg-[#F47E68] text-black font-semibold rounded-lg transition-all duration-300"
-          >
-            Registrarse
-          </button>
+          <MyButton isLoading={false} text="Registrarse" />
         </form>
       </div>
     </div>
