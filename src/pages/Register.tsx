@@ -57,7 +57,7 @@ export default function Register() {
       {/* Formulario */}
       <div className="rounded-lg shadow-lg w-full max-w-lg p-6 space-y-6">
         {/* Título */}
-        <h1 className="text-center text-2xl md:text-3xl font-semibold text-white">
+        <h1 className="font-cookie text-center text-2xl md:text-3xl font-semibold text-white">
           Registrarse
         </h1>
 
