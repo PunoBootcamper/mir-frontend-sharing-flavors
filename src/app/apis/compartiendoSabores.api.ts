@@ -1,8 +1,17 @@
 //src/app/apis/compartiendoSabores.api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { User, UserCredentials } from "../../interfaces/index";
+import { User, UserCredentials, LoginResponse } from "../../interfaces/index";
 
+interface LoginResponse {
+  token: string;
+  profile: {
+    fullName: string;
+    avatar: string;
+    role: string;
+    email: string;
+  };
+}
 export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
@@ -14,11 +23,11 @@ export const compartiendoSaboresApi = createApi({
         body,
       }),
     }),
-    login: builder.mutation<User, Partial<UserCredentials>>({
-      query: (user) => ({
+    login: builder.mutation<LoginResponse, UserCredentials>({
+      query: (credentials) => ({
         url: "/auth/local/login",
         method: "POST",
-        body: user,
+        body: credentials,
       }),
     }),
   }),

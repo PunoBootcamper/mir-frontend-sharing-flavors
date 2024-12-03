@@ -8,7 +8,8 @@ import { UserCredentials } from "../interfaces/User";
 import { useLoginMutation } from "../app/apis/compartiendoSabores.api";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../app/store/authSlice";
-import MyButton from "../componentes/ui/MyButton";
+import MyButton from "../componentes/ui/Button/LoadingButton";
+import CommonButton from "../componentes/ui/Button/CommonButton";
 
 const loginSchema = yup.object({
   email: yup
@@ -121,12 +122,10 @@ export default function Login() {
 
         {/* Botón de registrarse */}
         <div className="w-full mb-2">
-          <button
+          <CommonButton
+            text="Registrarse"
             onClick={() => navigate("/register")}
-            className="w-full h-12 bg-[#D9C9A5] hover:bg-[#F47E68] text-black font-semibold rounded-lg transition-colors duration-300"
-          >
-            Registrarse
-          </button>
+          />
         </div>
       </form>
     </div>

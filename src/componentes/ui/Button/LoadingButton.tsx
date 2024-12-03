@@ -1,10 +1,15 @@
 import { CircularProgress } from "@mui/material";
 
-interface MyButtonProps {
+interface LoadingButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading: boolean;
   text: string;
 }
-export default function MyButton({ isLoading, text, ...props }: MyButtonProps) {
+export default function LoadingButton({
+  isLoading,
+  text,
+  ...props
+}: LoadingButtonProps) {
   return (
     <button
       type="submit"
