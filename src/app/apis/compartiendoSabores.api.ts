@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { User, UserCredentials } from "../../interfaces/index";
 
 export const compartiendoSaboresApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
   endpoints: (builder) => ({
     createUser: builder.mutation<User, Partial<User>>({
