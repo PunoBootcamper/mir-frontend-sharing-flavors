@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../interfaces/User";
+import { LoginResponse } from "../../interfaces";
 
 interface AuthState {
-  user: User | null;
+  user: LoginResponse | null;
   isAuthenticated: boolean;
 }
 
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem("user") || "null"), // Cargar usuario desde localStorage
-  isAuthenticated: !!localStorage.getItem("user"), // Verificar si hay un usuario guardado
+  user: JSON.parse(localStorage.getItem("user") || "null"),
+  isAuthenticated: !!localStorage.getItem("user"),
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginSuccess: (state, action: PayloadAction<User>) => {
+    loginSuccess: (state, action: PayloadAction<LoginResponse>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
 

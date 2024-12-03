@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/User";
 import { useCreateUserMutation } from "../app/apis/compartiendoSabores.api";
-import MyButton from "../componentes/ui/MyButton";
+import MyButton from "../componentes/ui/Button/LoadingButton";
 
 const registerSchema = yup.object({
   first_name: yup.string().required("Nombre es requerido"),
@@ -26,7 +26,7 @@ const registerSchema = yup.object({
 
 export default function Register() {
   const navigate = useNavigate();
-  const [createUser] = useCreateUserMutation();
+  const [createUser, { isLoading }] = useCreateUserMutation();
   const {
     control,
     handleSubmit,
@@ -196,7 +196,7 @@ export default function Register() {
             />
           </div>
           {/* Botón de registrarse */}
-          <MyButton isLoading={false} text="Registrarse" />
+          <MyButton isLoading={isLoading} text="Registrarse" />
         </form>
       </div>
     </div>
