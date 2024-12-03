@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Category {
   src: string;
@@ -10,36 +11,37 @@ const categories: Category[] = [
   {
     src: "https://www.comedera.com/wp-content/uploads/2013/05/sopa-de-verduras-1.jpg",
     title: "Sopas",
-    path: "/category/Sopas",
+    path: "/category/sopas",
   },
   {
     src: "https://www.laylita.com/recetas/wp-content/uploads/Ensalada-de-lechuga-con-limon-y-cilantro.jpg",
     title: "Ensaladas",
-    path: "/category/Ensaladas",
+    path: "/category/ensaladas",
   },
   {
     src: "https://uvn-brightspot.s3.amazonaws.com/assets/vixes/3/3_entradas_deliciosas_pero_saludables_que_puedes_darle_a_tus_invitados_si_tienes_una_reunion_en_casa4.jpg",
     title: "Entradas",
-    path: "/category/Entradas",
+    path: "/category/entradas",
   },
   {
     src: "https://www.lima2019.pe/sites/default/files/inline-images/preview-gallery-004_0.jpg",
     title: "Platos Fuertes",
-    path: "/category/Platos Fuertes",
+    path: "/category/platos-fuertes",
   },
   {
     src: "https://media.glamour.mx/photos/63fbac8762e9478a3fe578a3/3:2/w_2429,h_1620,c_limit/Decoraci%C3%B3n%20de%20bebidas.jpg",
     title: "Bebidas",
-    path: "/category/Bebidas",
+    path: "/category/bebidas",
   },
   {
     src: "https://www.lazayafruits.com/es/wp-content/uploads/sites/2/2020/08/nuevas-tendencias-en-pasteleria-industrial-1.jpg",
     title: "Pastelería y Postres",
-    path: "/category/Pastelería y Postres",
+    path: "/category/Ppasteleria-postres",
   },
 ];
 
 const Carousel: React.FC = () => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Cambiar automáticamente las imágenes cada 4 segundos
@@ -68,7 +70,7 @@ const Carousel: React.FC = () => {
   const handleImageClick = (path: string) => {
     console.log(`Navigating to: ${path}`);
     // Aquí puedes redirigir al usuario a la ruta usando react-router-dom, por ejemplo:
-    // navigate(path);
+    navigate(path);
   };
 
   return (
