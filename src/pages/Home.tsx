@@ -1,5 +1,6 @@
 import Carousel from "./Home/Carousel";
 import Navbar from "../componentes/ui/Navbar/Navbar";
+import AddButton from "./Home/AddButton";
 export default function Home() {
   return (
     <>
@@ -15,6 +16,7 @@ export default function Home() {
             <Carousel />
           </div>
         </main>
+        ¿<AddButton />
       </div>
     </>
   );
