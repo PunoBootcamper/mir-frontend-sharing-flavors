@@ -1,28 +1,23 @@
-interface RecipeCardProps {
-  image: string; // URL de la imagen
-  title: string;
-  subtitle: string;
-  views: number;
-  rating: number; // De 1 a 5
-}
+import { Recipe } from "../../interfaces";
 
-const RecipeCard: React.FC<RecipeCardProps> = ({
-  image,
+const RecipeCard: React.FC<Partial<Recipe>> = ({
   title,
-  subtitle,
+  images,
   views,
-  rating,
+  average_rating = 0,
 }) => {
+  const imgURL = images
+    ? images[0]
+    : "https://i.ytimg.com/vi/J9fJDuix1cc/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCzv4X2gHz_PeK63pGEZsaJ22Sbeg";
   return (
     <div className="flex items-center bg-[#93AE97] rounded-lg shadow-lg overflow-hidden">
       {/* Imagen */}
       <div className="w-1/3 bg-gray-200 flex items-center justify-center">
-        <img src={image} alt={title} className="object-cover h-full w-full" />
+        <img src={imgURL} alt={title} className="object-cover h-full w-full" />
       </div>
       {/* Información */}
       <div className="w-2/3 p-4">
         <h2 className="text-xl font-bold text-white">{title}</h2>
-        <p className="text-sm text-gray-200 italic">{subtitle}</p>
         <div className="flex items-center mt-2 space-x-2">
           {/* Número de vistas */}
           <div className="flex items-center text-black">
@@ -42,7 +37,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
               <svg
                 key={index}
                 className={`w-5 h-5 ${
-                  index < rating ? "text-yellow-500" : "text-gray-300"
+                  index < average_rating ? "text-yellow-500" : "text-gray-300"
                 }`}
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"

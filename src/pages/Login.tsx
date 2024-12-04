@@ -54,7 +54,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#281B23] flex flex-col items-center px-4">
+    <div className="min-h-screen bg-primary flex flex-col items-center px-4">
       {/* Título */}
       <div className="text-center mt-16 font-cookie text-white">
         <h1 className="font-cookie text-3xl md:text-5xl max-w-md">

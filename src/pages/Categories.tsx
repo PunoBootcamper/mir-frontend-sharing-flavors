@@ -1,8 +1,9 @@
-import Carousel from "../componentes/Home/Carousel";
 import Navbar from "../componentes/ui/Navbar/Navbar";
 import AddButton from "../componentes/Home/AddButton";
 import RecipeCard from "../componentes/recipe/RecipeCard";
-export default function Home() {
+import { useParams } from "react-router-dom";
+export default function Categories() {
+  const { category } = useParams<{ category: string }>();
   return (
     <>
       <Navbar />
@@ -14,17 +15,11 @@ export default function Home() {
         </div>
         <main className="w-full max-w-4xl p-4">
           <div className="bg-[#D9C9A5] p-6 rounded-xl shadow-lg">
-            <Carousel />
+            {category}
           </div>
         </main>
         <AddButton />
-        <RecipeCard
-          image="https://via.placeholder.com/150"
-          title="Queque de Vainilla"
-          subtitle="(Pastelería D'Pepe)"
-          views={17}
-          rating={4}
-        />
+        <RecipeCard title="Queque de Vainilla" views={17} average_rating={4} />
       </div>
     </>
   );
