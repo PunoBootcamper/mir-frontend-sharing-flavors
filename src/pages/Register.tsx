@@ -54,7 +54,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#281B23] flex justify-center items-center px-4 py-8">
+    <div className="min-h-screen bg-primary flex justify-center items-center px-4 py-8">
       {/* Formulario */}
       <div className="rounded-lg shadow-lg w-full max-w-lg p-6 space-y-6">
         {/* Título */}

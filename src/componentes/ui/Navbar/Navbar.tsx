@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <nav className="border-gray-200 bg-[#d12942]">
+    <nav className="fixed w-full border-gray-200 bg-[#d12942]">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
         <a href="/home" className="flex items-center">
           <img src="/logo.ico" className="h-14 w-14" alt="Logo" />

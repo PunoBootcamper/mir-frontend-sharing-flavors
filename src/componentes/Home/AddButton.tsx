@@ -9,7 +9,7 @@ export default function CreateButton() {
   return (
     <button
       onClick={() => navigate("/add-recipe")}
-      className="fixed bottom-8 right-8 bg-[#d12942] hover:bg-[#b02036] text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
+      className="fixed bottom-8 right-8 bg-secondary hover:bg-[#b02036] text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
     >
       + Añadir Receta
     </button>
