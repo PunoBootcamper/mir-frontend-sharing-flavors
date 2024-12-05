@@ -72,6 +72,11 @@ export const compartiendoSaboresApi = createApi({
     getMessagesByChatId: builder.query<Message[], string>({
       query: (chat_id) => `api/message/${chat_id}`,
     }),
+    getRecipeById: builder.query<Recipe, string>({
+      query: (id) => ({
+        url: `api/recipe/${id}`,
+      }),
+    }),
   }),
 });
 
@@ -86,4 +91,5 @@ export const {
   useGetChatsByUserIdQuery,
   useGetMessagesByChatIdQuery,
   useGetOneChatQuery,
+  useGetRecipeByIdQuery,
 } = compartiendoSaboresApi;
