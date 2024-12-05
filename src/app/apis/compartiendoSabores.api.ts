@@ -38,6 +38,11 @@ export const compartiendoSaboresApi = createApi({
       query: () => "/api/recipe/",
       providesTags: ["Recipes"],
     }),
+    getRecipeById: builder.query<Recipe, string>({
+      query: (id) => ({
+        url: `api/recipe/${id}`,
+      }),
+    }),
   }),
 });
 
@@ -46,4 +51,5 @@ export const {
   useCreateUserMutation,
   useGetRecipesQuery,
   useCreateRecipeMutation,
+  useGetRecipeByIdQuery,
 } = compartiendoSaboresApi;

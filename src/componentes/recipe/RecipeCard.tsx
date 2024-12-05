@@ -1,31 +1,37 @@
 import { Recipe } from "../../interfaces";
 import { useImageLoader } from "../../hooks/useImageLoader";
+import { Link } from "react-router-dom";
 
 const RecipeCard: React.FC<Partial<Recipe>> = ({
   title,
   images,
   views,
   average_rating = 0,
+  _id,
 }) => {
   const imgURL = useImageLoader(images);
+  const path = `/recipe/${_id}`;
+  const handleClicked = () => {
+    console.log("clicked");
+  };
   return (
     <div className="w-full h-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="flex justify-center">
         {" "}
-        <a href="#" className="w-full">
+        <Link to={path} onClick={handleClicked} className="w-full">
           <img
             className="p-8 rounded-t-lg h-64  md:h-64 w-full object-cover"
             src={imgURL}
             alt={title}
           />
-        </a>
+        </Link>
       </div>
       <div className="px-5 pb-5">
-        <a href="#">
+        <Link to={path} onClick={handleClicked}>
           <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white line-clamp-1">
             {title}
           </h5>
-        </a>
+        </Link>
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center space-x-1 rtl:space-x-reverse">
             {[...Array(5)].map((_, index) => (

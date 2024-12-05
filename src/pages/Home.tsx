@@ -1,6 +1,6 @@
 import AddButton from "../componentes/Home/AddButton";
 import RecipeCard from "../componentes/recipe/RecipeCard";
-import Layout from "../componentes/Home/Layout";
+import Layout from "../componentes/layouts/Layout";
 import { useGetRecipesQuery } from "../app/apis/compartiendoSabores.api";
 export default function Home() {
   const { data: recipes } = useGetRecipesQuery();
@@ -12,6 +12,7 @@ export default function Home() {
       title={recipe.title}
       average_rating={recipe.average_rating}
       views={recipe.views}
+      _id={recipe._id}
     />
   ));
 
