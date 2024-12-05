@@ -1,7 +1,6 @@
 //src/pages/Login.tsx
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { UserCredentials } from "../interfaces/User";
@@ -10,17 +9,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../app/store/authSlice";
 import MyButton from "../componentes/ui/Button/LoadingButton";
 import CommonButton from "../componentes/ui/Button/CommonButton";
-
-const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email("Debe ser un correo válido")
-    .required("Correo es requerido"),
-  password: yup
-    .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
-    .required("Contraseña es requerida"),
-});
+import { loginSchema } from "../utils/yupSchemas";
 
 export default function Login() {
   const navigate = useNavigate();

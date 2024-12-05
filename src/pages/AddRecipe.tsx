@@ -1,66 +1,18 @@
 import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import FormField from "../componentes/ui/Form/FormField";
 import Dropzone from "../componentes/ui/Form/Dropzone";
 import useCloudinaryUpload from "../hooks/useCloudinaryUpload";
-
-const recipeSchema = yup.object().shape({
-  title: yup
-    .string()
-    .required("El título es obligatorio")
-    .min(3, "El título debe tener al menos 3 caracteres"),
-  ingredients: yup
-    .array()
-    .of(
-      yup.object({
-        ingredientsName: yup
-          .string()
-          .required("Cada ingrediente es obligatorio"),
-      }),
-    )
-    .min(1, "Debe haber al menos un ingrediente")
-    .required("Los ingredientes son obligatorios"),
-  procedure: yup
-    .array()
-    .of(
-      yup.object({
-        stepName: yup.string().required("Cada paso es obligatorio"),
-      }),
-    )
-    .min(1, "Debe haber al menos un paso")
-    .required("Los pasos son obligatorios"),
-  category: yup.string().required("La categoría es obligatoria"),
-  image: yup
-    .mixed<File>()
-    .required("La imagen es obligatoria")
-    .test(
-      "fileType",
-      "Solo se permiten imágenes (jpeg, png, gif)",
-      (value) =>
-        !value ||
-        (value &&
-          ["image/jpeg", "image/png", "image/gif"].includes(
-            (value as File).type,
-          )),
-    ),
-});
-
-interface IRecipeForm {
-  title: string;
-  ingredients: { ingredientsName: string }[];
-  procedure: { stepName: string }[];
-  category: string;
-  image: File;
-}
+import { IRecipeForm } from "../interfaces";
+import { transformIRecipeFormToRecipe } from "../utils/recipeUtils";
+import { useCreateRecipeMutation } from "../app/apis/compartiendoSabores.api";
+import { recipeSchema } from "../utils/yupSchemas";
 
 const AddRecipe: React.FC = () => {
-  const {
-    uploadImage,
-    loading: loadingImg,
-    uploadedUrl,
-  } = useCloudinaryUpload();
+  const [createRecipe, { isLoading: loadingRecipe }] =
+    useCreateRecipeMutation();
+  const { uploadImage, loading: loadingImg } = useCloudinaryUpload();
   const {
     register,
     control,
@@ -93,21 +45,17 @@ const AddRecipe: React.FC = () => {
     appendStep({ stepName: "" });
   };
 
-  const handleUploadImage = async (file: File) => {
-    if (file) {
-      try {
-        const url = await uploadImage(file);
-        console.log("Image uploaded successfully:", url);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
   const onSubmit = async (data: IRecipeForm) => {
-    console.log("Datos del formulario:", data);
-    await handleUploadImage(data.image);
-    console.log("Imagen subida:", uploadedUrl);
+    try {
+      console.log("Datos del formulario:", data);
+      const uploadedUrl = await uploadImage(data.image);
+      console.log("Imagen subida:", uploadedUrl);
+      const recipe = transformIRecipeFormToRecipe(data, "1", uploadedUrl || "");
+      console.log("Receta a enviar:", recipe);
+      await createRecipe(recipe).unwrap();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -257,7 +205,11 @@ const AddRecipe: React.FC = () => {
               type="submit"
               className="md:fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors shadow-lg"
             >
-              {loadingImg ? "Cargando imagen" : "Agregar Receta"}
+              {loadingImg
+                ? "Cargando imagen..."
+                : loadingRecipe
+                  ? "Subiendo receta..."
+                  : "Publicar"}
             </button>
           </div>
         </form>

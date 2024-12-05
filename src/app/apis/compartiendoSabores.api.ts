@@ -39,5 +39,9 @@ export const compartiendoSaboresApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useCreateUserMutation, useGetRecipesQuery } =
-  compartiendoSaboresApi;
+export const {
+  useLoginMutation,
+  useCreateUserMutation,
+  useGetRecipesQuery,
+  useCreateRecipeMutation,
+} = compartiendoSaboresApi;
