@@ -132,6 +132,18 @@ const AddRecipe: React.FC = () => {
               >
                 Ingredientes
               </label>
+              <button
+                type="button"
+                onClick={handleAddIngredient}
+                className="bg-green-500 w-full text-white p-2 rounded-md hover:bg-green-600 transition-colors mb-6"
+              >
+                Agregar Ingrediente
+              </button>
+              {errors.ingredients?.message && (
+                <p className="text-red-500 text-sm">
+                  {errors.ingredients.message}
+                </p>
+              )}
               {ingredientsFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2 mb-2">
                   <input
@@ -150,18 +162,6 @@ const AddRecipe: React.FC = () => {
                   </button>
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={handleAddIngredient}
-                className="bg-green-500 w-full text-white p-2 rounded-md hover:bg-green-600 transition-colors"
-              >
-                Agregar Ingrediente
-              </button>
-              {errors.ingredients?.message && (
-                <p className="text-red-500 text-sm">
-                  {errors.ingredients.message}
-                </p>
-              )}
             </div>
             <div className="mb-4">
               {" "}
@@ -172,6 +172,18 @@ const AddRecipe: React.FC = () => {
               >
                 Procedimiento
               </label>
+              <button
+                type="button"
+                onClick={handleAddStep}
+                className="bg-green-500 w-full mb-6 text-white p-2 rounded-md hover:bg-green-600 transition-colors"
+              >
+                Agregar paso
+              </button>
+              {errors.procedure?.message && (
+                <p className="text-red-500 text-sm">
+                  {errors.procedure.message}
+                </p>
+              )}
               {procedureFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2 mb-2">
                   <input
@@ -188,18 +200,6 @@ const AddRecipe: React.FC = () => {
                   </button>
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={handleAddStep}
-                className="bg-green-500 w-full text-white p-2 rounded-md hover:bg-green-600 transition-colors"
-              >
-                Agregar paso
-              </button>
-              {errors.procedure?.message && (
-                <p className="text-red-500 text-sm">
-                  {errors.procedure.message}
-                </p>
-              )}
             </div>
             <button
               type="submit"

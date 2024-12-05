@@ -10,7 +10,7 @@ import {
 
 export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
-
+  tagTypes: ["Recipes"],
   endpoints: (builder) => ({
     createUser: builder.mutation<User, Partial<User>>({
       query: (body) => ({
@@ -32,9 +32,11 @@ export const compartiendoSaboresApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Recipes"],
     }),
     getRecipes: builder.query<Recipe[], void>({
       query: () => "/api/recipe/",
+      providesTags: ["Recipes"],
     }),
   }),
 });
