@@ -8,6 +8,7 @@ import { IRecipeForm } from "../interfaces";
 import { transformIRecipeFormToRecipe } from "../utils/recipeUtils";
 import { useCreateRecipeMutation } from "../app/apis/compartiendoSabores.api";
 import { recipeSchema } from "../utils/yupSchemas";
+import { useNavigate } from "react-router-dom";
 
 const AddRecipe: React.FC = () => {
   const [createRecipe, { isLoading: loadingRecipe }] =
@@ -37,6 +38,8 @@ const AddRecipe: React.FC = () => {
     control,
   });
 
+  const navigate = useNavigate();
+
   const handleAddIngredient = () => {
     appendIngredient({ ingredientsName: "" });
   };
@@ -53,6 +56,7 @@ const AddRecipe: React.FC = () => {
       const recipe = transformIRecipeFormToRecipe(data, "1", uploadedUrl || "");
       console.log("Receta a enviar:", recipe);
       await createRecipe(recipe).unwrap();
+      navigate("/home");
     } catch (error) {
       console.error("Error:", error);
     }
