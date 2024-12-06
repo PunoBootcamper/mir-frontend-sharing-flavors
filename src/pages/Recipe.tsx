@@ -1,6 +1,6 @@
 import { useGetRecipeByIdQuery } from "../app/apis/compartiendoSabores.api";
-import Layout from "../componentes/layouts/Layout";
 import { useParams } from "react-router-dom";
+import RecipeCardDetailed from "../componentes/recipe/RecipeCardDetailed";
 
 const Recipe = () => {
   const { id } = useParams();
@@ -9,9 +9,7 @@ const Recipe = () => {
   console.log("Receta:", recipe);
   return (
     <div>
-      <Layout>
-        <h1>{id}</h1>
-      </Layout>
+      <RecipeCardDetailed {...recipe} />
     </div>
   );
 };
