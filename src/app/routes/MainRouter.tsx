@@ -25,6 +25,8 @@ const MainRouter = () => {
         </Route>
         <Route path="/add-recipe" element={<AddRecipe />} />
       </Route>
+
+      <Route path="/chat" element={<Chat />} />
     </Routes>
   );
 };
