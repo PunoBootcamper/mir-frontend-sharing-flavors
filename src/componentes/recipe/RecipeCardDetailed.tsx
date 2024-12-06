@@ -4,6 +4,7 @@ import Views from "./Views";
 import { useImageLoader } from "../../hooks/useImageLoader";
 import CommentForm from "../comments/CommentForm";
 import CommentsList from "../comments/CommentList";
+import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
 
 const commentsData = [
   {
@@ -43,6 +44,8 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
     console.log("clicked");
   };
 
+  const { data: user, error, isLoading } = useGetUserByIdQuery(user_id ?? "");
+
   return (
     <div className="w-full bg-gray-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       {/* Encabezado */}
@@ -74,9 +77,32 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
         <div className="flex flex-col md:flex-row items-start gap-4">
           {/* Información del usuario */}
           <div className="w-full md:w-1/2">
-            <h5 className="text-xl font-semibold text-gray-900 dark:text-white line-clamp-1 mb-4">
-              {user_id}
-            </h5>
+            {isLoading && (
+              <p className="text-gray-500 dark:text-gray-400">
+                Cargando información del usuario...
+              </p>
+            )}
+            {error && (
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src={"https://via.placeholder.com/40"}
+                  alt={`avatar`}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </div>
+            )}
+            {!isLoading && !error && user && (
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src={user.photo_url || "https://via.placeholder.com/40"}
+                  alt={`${user.first_name}'s avatar`}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {user.first_name} {user.last_name}
+                </h5>
+              </div>
+            )}
             <ul className="space-y-1 list-disc list-inside text-gray-500 dark:text-white">
               {ingredients?.map((ingredient, index) => (
                 <li key={index}>{ingredient}</li>

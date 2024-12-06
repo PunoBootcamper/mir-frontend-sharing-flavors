@@ -12,6 +12,9 @@ export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   tagTypes: ["Recipes"],
   endpoints: (builder) => ({
+    getUserById: builder.query<User, string>({
+      query: (id) => `api/user/${id}`,
+    }),
     createUser: builder.mutation<User, Partial<User>>({
       query: (body) => ({
         url: "api/user/",
@@ -43,6 +46,29 @@ export const compartiendoSaboresApi = createApi({
         url: `api/recipe/${id}`,
       }),
     }),
+    updateRecipe: builder.mutation<Recipe, Partial<Recipe>>({
+      query: (recipe) => ({
+        url: `recipe/update/${recipe._id}`,
+        method: "PUT",
+        body: recipe,
+      }),
+      async onQueryStarted({ _id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          compartiendoSaboresApi.util.updateQueryData(
+            "getRecipeById",
+            _id || "",
+            (draft) => {
+              Object.assign(draft, patch);
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -52,4 +78,6 @@ export const {
   useGetRecipesQuery,
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,
+  useGetUserByIdQuery,
+  useUpdateRecipeMutation,
 } = compartiendoSaboresApi;
