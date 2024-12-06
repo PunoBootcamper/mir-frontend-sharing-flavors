@@ -7,15 +7,15 @@ import Recipe from "../../pages/Recipe";
 import NotFound from "../../pages/NotFound";
 import Layout from "../../componentes/layouts/Layout";
 import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 const MainRouter = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/add-recipe" element={<AddRecipe />} />
-      <Route path="/recipe/:id" element={<Recipe />} />
-      <Route path="/chat" element={<Chat />} />
       <Route path="*" element={<NotFound />} />
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
       <Route element={<ProtectedRoute allowedRoles={["USER"]} />}>
         <Route path="/example" element={<Example />} />
         <Route path="/" element={<Layout />}>
