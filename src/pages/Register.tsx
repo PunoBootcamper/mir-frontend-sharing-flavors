@@ -1,28 +1,11 @@
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { User } from "../interfaces/User";
 import { useCreateUserMutation } from "../app/apis/compartiendoSabores.api";
 import MyButton from "../componentes/ui/Button/LoadingButton";
-
-const registerSchema = yup.object({
-  first_name: yup.string().required("Nombre es requerido"),
-  last_name: yup.string().required("Apellido es requerido"),
-  email: yup
-    .string()
-    .email("Debe ser un correo válido")
-    .required("Correo es requerido"),
-  password: yup
-    .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
-    .required("Contraseña es requerida"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password"), undefined], "Las contraseñas no coinciden")
-    .required("Confirmar contraseña es requerido"),
-});
+import { registerSchema } from "../utils/yupSchemas";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -45,7 +28,6 @@ export default function Register() {
   const onSubmit = async (data: Partial<User>) => {
     try {
       data.role = "USER";
-      console.log("Datos enviados:", data);
       await createUser(data).unwrap();
       navigate("/login");
     } catch (error) {
