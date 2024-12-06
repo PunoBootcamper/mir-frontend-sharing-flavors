@@ -38,10 +38,17 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   user_id,
   ingredients,
   procedure,
+  _id,
 }) => {
   const imgURL = useImageLoader(images);
   const handleClicked = () => {
-    console.log("clicked");
+    console.log("funcion para agrefar a favoritos");
+  };
+
+  const handleSubmittedComment = (rating: number, comment: string) => {
+    console.log(rating, comment);
+    console.log("funcion para enviar comentario");
+    console.log(_id);
   };
 
   const { data: user, error, isLoading } = useGetUserByIdQuery(user_id ?? "");
@@ -132,9 +139,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
 
         {/* Comentarios */}
         <CommentsList comments={commentsData} />
-        <CommentForm
-          onSubmit={(rating, comment) => console.log(rating, comment)}
-        />
+        <CommentForm onSubmit={handleSubmittedComment} />
       </div>
     </div>
   );

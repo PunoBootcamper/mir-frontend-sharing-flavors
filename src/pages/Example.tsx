@@ -32,7 +32,7 @@ const schema: yup.ObjectSchema<IFormInput> = yup.object({
   ),
 });
 
-function Example() {
+const Example = () => {
   const {
     register,
     handleSubmit,
@@ -101,6 +101,6 @@ function Example() {
       </form>
     </div>
   );
-}
+};
 
 export default Example;
