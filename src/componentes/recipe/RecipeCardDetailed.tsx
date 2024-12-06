@@ -2,7 +2,7 @@ import { Recipe } from "../../interfaces";
 import Stars from "./Stars";
 import Views from "./Views";
 import { useImageLoader } from "../../hooks/useImageLoader";
-import CommentForm from "../comments/CommenForm";
+import CommentForm from "../comments/CommentForm";
 import CommentsList from "../comments/CommentList";
 
 const commentsData = [
