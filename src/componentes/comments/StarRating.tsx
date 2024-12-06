@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface StarRatingProps {
   maxRating?: number;
+  value?: number;
   onRatingChange?: (rating: number) => void;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({
   maxRating = 5,
+  value = 0,
   onRatingChange,
 }) => {
   const [selectedRating, setSelectedRating] = useState<number>(0);
+
+  useEffect(() => {
+    setSelectedRating(value);
+  }, [value]);
 
   const handleRatingClick = (value: number) => {
     setSelectedRating(value);
