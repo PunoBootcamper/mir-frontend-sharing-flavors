@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import Navbar from "../ui/Navbar/Navbar";
+import { Outlet } from "react-router-dom";
+import AddButton from "../ui/Button/AddButton";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   const [navbarHeight, setNavbarHeight] = useState(0);
 
   useEffect(() => {
@@ -21,8 +19,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         style={{ paddingTop: `${navbarHeight}px` }}
         className="min-h-screen flex flex-col items-center justify-center bg-primary"
       >
-        <main className="w-full max-w-4xl p-4">{children}</main>
+        <main className="w-full max-w-4xl p-4">
+          <Outlet />
+        </main>
       </div>
+      <AddButton />
     </>
   );
 };

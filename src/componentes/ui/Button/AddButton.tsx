@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store/store";
+import { RootState } from "../../../app/store/store";
 
 export default function CreateButton() {
   const navigate = useNavigate();
