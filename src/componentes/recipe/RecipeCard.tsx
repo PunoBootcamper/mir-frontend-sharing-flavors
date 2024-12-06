@@ -3,6 +3,7 @@ import { useImageLoader } from "../../hooks/useImageLoader";
 import { Link } from "react-router-dom";
 import Stars from "./Stars";
 import Views from "./Views";
+
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
 
 const RecipeCard: React.FC<Recipe> = ({
@@ -15,11 +16,12 @@ const RecipeCard: React.FC<Recipe> = ({
 }) => {
   const imgURL = useImageLoader(images);
   const path = `/recipe/${_id}`;
-  const handleClicked = () => {
-    console.log("clicked");
-  };
 
   const { data: user, error, isLoading } = useGetUserByIdQuery(user_id);
+
+  const handleClicked = async () => {
+    console.log("Clicked");
+  };
 
   return (
     <div className="w-full h-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

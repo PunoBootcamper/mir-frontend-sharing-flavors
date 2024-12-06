@@ -46,29 +46,6 @@ export const compartiendoSaboresApi = createApi({
         url: `api/recipe/${id}`,
       }),
     }),
-    updateRecipe: builder.mutation<Recipe, Partial<Recipe>>({
-      query: (recipe) => ({
-        url: `recipe/update/${recipe._id}`,
-        method: "PUT",
-        body: recipe,
-      }),
-      async onQueryStarted({ _id, ...patch }, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          compartiendoSaboresApi.util.updateQueryData(
-            "getRecipeById",
-            _id || "",
-            (draft) => {
-              Object.assign(draft, patch);
-            },
-          ),
-        );
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-        }
-      },
-    }),
   }),
 });
 
@@ -79,5 +56,4 @@ export const {
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,
   useGetUserByIdQuery,
-  useUpdateRecipeMutation,
 } = compartiendoSaboresApi;
