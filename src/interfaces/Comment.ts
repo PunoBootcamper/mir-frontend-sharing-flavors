@@ -8,6 +8,7 @@ export interface Comment {
 }
 
 export interface CommentWithAvatar extends Comment {
-  avatarUrl: string;
-  username: string;
+  photo_url: string;
+  first_name: string;
+  last_name: string;
 }

@@ -4,10 +4,11 @@ import Views from "./Views";
 import { useImageLoader } from "../../hooks/useImageLoader";
 import CommentForm from "../comments/CommentForm";
 import CommentsList from "../comments/CommentList";
-import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
+import {} from "../../app/apis/compartiendoSabores.api";
 import { Comment } from "../../interfaces";
 import {
   useGetCommentsQuery,
+  useGetUserByIdQuery,
   useCreateCommentMutation,
 } from "../../app/apis/compartiendoSabores.api";
 const commentsData = [
@@ -15,21 +16,18 @@ const commentsData = [
     id: 1,
     name: "Juan Pérez",
     text: "Deliciosa receta, la intentaré este fin de semana.",
-    avatar: "https://via.placeholder.com/40",
     rating: 4,
   },
   {
     id: 2,
     name: "María López",
     text: "Me encantó, le añadí más especias y quedó genial.",
-    avatar: "https://via.placeholder.com/40",
     rating: 5,
   },
   {
     id: 3,
     name: "Carlos Rodríguez",
     text: "¿Qué otro ingrediente podría sustituir el ajo?",
-    avatar: "https://via.placeholder.com/40",
     rating: 3,
   },
 ];
