@@ -52,10 +52,40 @@ export const compartiendoSaboresApi = createApi({
     }),
     createComment: builder.mutation<Comment, Partial<Comment>>({
       query: (comment) => ({
-        url: `api/comment/`,
+        url: `api/comment`,
         method: "POST",
         body: comment,
       }),
+      async onQueryStarted(
+        { recipe_id, ...newComment },
+        { dispatch, queryFulfilled },
+      ) {
+        // Actualización optimista
+        const patchResult = dispatch(
+          compartiendoSaboresApi.util.updateQueryData(
+            "getComments",
+            recipe_id || "",
+            (draft) => {
+              draft.push({
+                _id: Math.random().toString(), // ID temporal
+                user_id: newComment.user_id || "", // Aseguramos que exista un user_id
+                recipe_id: recipe_id || "", // Asociamos al recipe_id
+                rating: newComment.rating || 0, // Valor predeterminado si no está presente
+                comment: newComment.comment || "Comentario temporal", // Texto predeterminado
+                __v: 0, // Valor inicial para versiones
+              });
+            },
+          ),
+        );
+
+        try {
+          // Espera la confirmación de la API
+          await queryFulfilled;
+        } catch {
+          // Revierte la actualización optimista si la API falla
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });

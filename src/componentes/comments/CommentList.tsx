@@ -13,15 +13,14 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
       </h5>
       <div className="space-y-4">
         {comments.map((comment) => (
-          <>
+          <div key={comment._id}>
             <CommentCard
-              key={comment._id}
               comment={comment.comment}
               rating={comment.rating}
               user_id={comment.user_id}
               recipe_id={comment.recipe_id}
             />
-          </>
+          </div>
         ))}
       </div>
     </div>
