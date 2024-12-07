@@ -22,11 +22,10 @@ const MainRouter = () => {
           <Route path="/home" element={<Home />} />
         </Route>
         <Route path="/add-recipe" element={<AddRecipe />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/profile/:id" element={<UserProfile />} />
       </Route>
-
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/profile" element={<UserProfile />} />
-      <Route path="/profile/:id" element={<UserProfile />} />
     </Routes>
   );
 };

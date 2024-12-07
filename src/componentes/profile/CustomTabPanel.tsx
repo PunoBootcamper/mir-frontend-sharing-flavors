@@ -1,5 +1,3 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 interface TabPanelProps {
@@ -22,7 +20,7 @@ export const CustomTabPanel = (props: TabPanelProps) => {
     >
       {value === index && (
         <Box>
-          <Typography>{children}</Typography>
+          {children} {/* Cambiado: No se envuelve en Typography */}
         </Box>
       )}
     </div>

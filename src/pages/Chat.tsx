@@ -15,96 +15,54 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 const socket = io("http://localhost:3000");
 
 const Chat = () => {
+  const navigate = useNavigate();
+
+  // Obtener credenciales del usuario autenticado
   const isUserAuthenticated = localStorage.getItem("user");
   const userCredentials =
     isUserAuthenticated && JSON.parse(isUserAuthenticated);
+
+  // Estado del componente
   const [friendSelected, setFriendSelected] = useState<User>();
   const [chatSelected, setChatSelected] = useState<iChat>();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [form, setForm] = useState<Partial<Message>>({ text: "" });
+  const conversationRef = useRef<HTMLDivElement>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+
+  // Queries
   const { data: myChats = [] } = useGetChatsByUserIdQuery(userCredentials._id);
   const { data: users = [] } = useGetUsersQuery();
   const { data: myMessages = [], refetch } = useGetMessagesByChatIdQuery(
     chatSelected?._id || "",
   );
   const [createMessage] = useCreateMessageMutation();
-  const navigate = useNavigate();
-  const conversationRef = useRef<HTMLDivElement>(null);
-  const [isUserScrolling, setIsUserScrolling] = useState(false);
 
+  // Función para ordenar datos
+  const sortData = <T extends Message | iChat>(data: T[]): T[] =>
+    [...data].sort(
+      (a, b) =>
+        new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
+    );
+
+  useEffect(() => {
+    const sorted = sortData(myMessages);
+    if (JSON.stringify(sorted) !== JSON.stringify(messages)) {
+      setMessages(sorted);
+    }
+  }, [myMessages, messages]);
+
+  // Scroll al final del contenedor
   const scrollToBottom = (smooth = false) => {
     if (conversationRef.current) {
-      if (smooth) {
-        conversationRef.current.scrollTo({
-          top: conversationRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      } else {
-        conversationRef.current.scrollTop =
-          conversationRef.current.scrollHeight;
-      }
-    }
-  };
-
-  const newDate = (data: string) => {
-    const dateMongoDB = new Date(data);
-    const hour = dateMongoDB.getHours().toString().padStart(2, "0");
-    const minute = dateMongoDB.getMinutes().toString().padStart(2, "0");
-    return `${hour}:${minute}`;
-  };
-
-  const sortData = <T extends Message | iChat>(data: T[]): T[] => {
-    const sortedData = [...data].sort((a, b) => {
-      const fechaA = new Date(a.updatedAt).getTime();
-      const fechaB = new Date(b.updatedAt).getTime();
-      return fechaA - fechaB;
-    });
-    if (data.length > 0 && "members" in data[0]) {
-      return sortedData.reverse() as T[];
-    }
-    return sortedData;
-  };
-
-  const myChatsSorted = sortData(myChats);
-  const myMessagesSorted = sortData(myMessages);
-
-  const [form, setForm] = useState<Partial<Message>>({
-    text: "",
-  });
-
-  const inputForm = (t: string) => {
-    setForm({
-      text: t,
-    });
-  };
-
-  const handleSendMessage = async () => {
-    const message = {
-      ...form,
-      chat_id: chatSelected?._id,
-      sender_id: userCredentials._id,
-    };
-
-    try {
-      const response = await createMessage(message).unwrap();
-      socket.emit("sendMessagesPrivate", {
-        message: response,
-        selectUser: friendSelected?._id,
+      conversationRef.current.scrollTo({
+        top: conversationRef.current.scrollHeight,
+        behavior: smooth ? "smooth" : "auto",
       });
-      scrollToBottom(true);
-    } catch (error) {
-      alert(JSON.stringify(error));
     }
-
-    setForm({
-      text: "",
-    });
   };
 
-  const handleOpenChat = async (friend: User, chat: iChat) => {
-    setFriendSelected(friend);
-    setChatSelected(chat);
-    await refetch();
-  };
-
+  // Manejo de eventos de scroll
   const handleScroll = () => {
     if (conversationRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = conversationRef.current;
@@ -112,39 +70,75 @@ const Chat = () => {
     }
   };
 
+  // Enviar mensaje
+  const handleSendMessage = async () => {
+    if (!form.text?.trim()) return;
+
+    const message: Message = {
+      ...form,
+      chat_id: chatSelected?._id,
+      sender_id: userCredentials._id,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      const response = await createMessage(message).unwrap();
+      setMessages((prev) => [...prev, response]);
+      socket.emit("sendMessagesPrivate", {
+        message: response,
+        selectUser: friendSelected?._id,
+      });
+      setForm({ text: "" });
+      scrollToBottom(true);
+    } catch (error) {
+      alert(`Error al enviar el mensaje: ${error}`);
+    }
+  };
+
+  // Abrir un chat
+  const handleOpenChat = async (friend: User, chat: iChat) => {
+    setFriendSelected(friend);
+    setChatSelected(chat);
+    await refetch();
+  };
+
+  // Manejo de eventos de socket
   useEffect(() => {
     socket.on("connect", () => console.log("Conectado al socket"));
     socket.emit("register", userCredentials._id);
-    socket.on("userExists", () => console.log("User already exists"));
-    socket.on("login", () => console.log("Logueado correctamente"));
+
     socket.on("sendMessage", async () => {
-      await refetch();
-      scrollToBottom(true);
+      await refetch(); // Refetch solo si es necesario
+      if (!isUserScrolling) scrollToBottom(true);
     });
 
     return () => {
       socket.off("connect");
-      socket.off("chat_message");
+      socket.off("sendMessage");
     };
-  }, [refetch, userCredentials._id]);
+  }, [userCredentials._id, isUserScrolling]);
 
+  // Scroll automático al recibir mensajes
   useEffect(() => {
-    if (!isUserScrolling) {
-      scrollToBottom(true);
-    }
-  }, [myMessagesSorted]);
+    if (!isUserScrolling) scrollToBottom(true);
+  }, [messages]);
 
   useEffect(() => {
     if (conversationRef.current) {
       conversationRef.current.addEventListener("scroll", handleScroll);
     }
-
     return () => {
-      if (conversationRef.current) {
-        conversationRef.current.removeEventListener("scroll", handleScroll);
-      }
+      conversationRef.current?.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // Formatear fecha
+  const formatTime = (date: string) => {
+    const d = new Date(date);
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const myChatsSorted = sortData(myChats);
 
   return (
     <>
@@ -195,18 +189,20 @@ const Chat = () => {
             </h2>
           </div>
 
-          {/* Contenedor de Mensajes con Scroll */}
+          {/* Contenedor de Mensajes */}
           <div
             className="flex-1 overflow-y-auto p-4 bg-gray-700"
             ref={conversationRef}
-            style={{ maxHeight: "calc(100vh - 180px)" }} // Ajusta la altura para que solo el área de mensajes tenga scroll
+            style={{ maxHeight: "calc(100vh - 180px)" }}
           >
-            {myMessagesSorted.map((message, index) => {
+            {messages.map((message, index) => {
               const isFriend = message.sender_id !== userCredentials._id;
               return (
                 <div
                   key={index}
-                  className={`mb-4 flex ${isFriend ? "justify-start" : "justify-end"}`}
+                  className={`mb-4 flex ${
+                    isFriend ? "justify-start" : "justify-end"
+                  }`}
                 >
                   <div
                     className={`p-3 rounded-lg max-w-xs ${
@@ -217,7 +213,7 @@ const Chat = () => {
                   >
                     <p className="text-sm">{message.text}</p>
                     <span className="text-xs text-gray-300">
-                      {newDate(message.updatedAt)}
+                      {formatTime(message.updatedAt)}
                     </span>
                   </div>
                 </div>
@@ -232,7 +228,7 @@ const Chat = () => {
               className="flex-1 p-3 rounded-l-lg bg-gray-700 text-white focus:outline-none"
               placeholder="Escribe un mensaje..."
               value={form.text}
-              onChange={({ target }) => inputForm(target.value)}
+              onChange={({ target }) => setForm({ text: target.value })}
             />
             <button
               className="p-3 bg-blue-600 rounded-r-lg text-white hover:bg-blue-500"
