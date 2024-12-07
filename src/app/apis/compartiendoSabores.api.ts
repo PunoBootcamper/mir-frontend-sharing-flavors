@@ -12,6 +12,9 @@ export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   tagTypes: ["Recipes"],
   endpoints: (builder) => ({
+    getUserById: builder.query<User, string>({
+      query: (id) => `api/user/${id}`,
+    }),
     createUser: builder.mutation<User, Partial<User>>({
       query: (body) => ({
         url: "api/user/",
@@ -38,6 +41,11 @@ export const compartiendoSaboresApi = createApi({
       query: () => "/api/recipe/",
       providesTags: ["Recipes"],
     }),
+    getRecipeById: builder.query<Recipe, string>({
+      query: (id) => ({
+        url: `api/recipe/${id}`,
+      }),
+    }),
   }),
 });
 
@@ -46,4 +54,6 @@ export const {
   useCreateUserMutation,
   useGetRecipesQuery,
   useCreateRecipeMutation,
+  useGetRecipeByIdQuery,
+  useGetUserByIdQuery,
 } = compartiendoSaboresApi;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store/store";
 import { logout } from "../../../app/store/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import CommonButton from "../Button/CommonButton";
 
 const Navbar: React.FC = () => {
@@ -13,11 +13,11 @@ const Navbar: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <nav className="fixed w-full border-gray-200 bg-[#d12942]">
+    <nav className="z-40 fixed w-full border-gray-200 bg-[#d12942]">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        <a href="/home" className="flex items-center">
+        <Link to="/home" className="flex items-center">
           <img src="/logo.ico" className="h-14 w-14" alt="Logo" />
-        </a>
+        </Link>
 
         {user ? (
           <div className="relative">
@@ -45,24 +45,24 @@ const Navbar: React.FC = () => {
                 </div>
                 <ul className="py-2">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
                       Chats
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
                       Editar perfil
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       onClick={() => {
                         setDropdownOpen(false);
                         dispatch(logout());
@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
                       Logout
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
