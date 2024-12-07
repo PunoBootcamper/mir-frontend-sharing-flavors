@@ -1,11 +1,5 @@
 import CommentCard from "./CommentCard";
-
-interface Comment {
-  id: number;
-  name: string;
-  text: string;
-  rating: number;
-}
+import { Comment } from "../../interfaces";
 
 interface CommentsListProps {
   comments: Comment[];
@@ -21,13 +15,11 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
         {comments.map((comment) => (
           <>
             <CommentCard
-              key={comment.id}
-              id={comment.id}
-              text={comment.text}
-              comment={comment.text}
-              first_name={comment.name}
-              last_name={comment.name}
+              key={comment._id}
+              comment={comment.comment}
               rating={comment.rating}
+              user_id={comment.user_id}
+              recipe_id={comment.recipe_id}
             />
           </>
         ))}

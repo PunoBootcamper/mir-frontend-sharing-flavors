@@ -11,26 +11,6 @@ import {
   useGetUserByIdQuery,
   useCreateCommentMutation,
 } from "../../app/apis/compartiendoSabores.api";
-const commentsData = [
-  {
-    id: 1,
-    name: "Juan Pérez",
-    text: "Deliciosa receta, la intentaré este fin de semana.",
-    rating: 4,
-  },
-  {
-    id: 2,
-    name: "María López",
-    text: "Me encantó, le añadí más especias y quedó genial.",
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: "Carlos Rodríguez",
-    text: "¿Qué otro ingrediente podría sustituir el ajo?",
-    rating: 3,
-  },
-];
 
 const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
@@ -44,7 +24,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
 }) => {
   const imgURL = useImageLoader(images);
   const handleClicked = () => {
-    console.log("funcion para agrefar a favoritos");
+    console.log("funcion para agregar a favoritos");
   };
 
   const [createComment] = useCreateCommentMutation();
@@ -152,7 +132,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
         </div>
 
         {/* Comentarios */}
-        <CommentsList comments={commentsData} />
+        <CommentsList comments={comments ?? []} />
         <CommentForm onSubmit={handleSubmittedComment} />
       </div>
     </div>
