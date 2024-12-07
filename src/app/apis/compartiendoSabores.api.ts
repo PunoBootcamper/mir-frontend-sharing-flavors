@@ -36,6 +36,9 @@ export const compartiendoSaboresApi = createApi({
         body: credentials,
       }),
     }),
+    getUserById: builder.query<User, string>({
+      query: (id) => `api/user/${id}`,
+    }),
     createRecipe: builder.mutation<Recipe, Partial<Recipe>>({
       query: (body) => ({
         url: "api/recipe/",
@@ -53,7 +56,7 @@ export const compartiendoSaboresApi = createApi({
     createChat: builder.mutation<Chat, { owner_id: string; friend_id: string }>(
       {
         query: (chat) => ({
-          url: "api/chat/create",
+          url: "api/chat/",
           method: "POST",
           body: chat,
         }),
@@ -89,6 +92,7 @@ export const {
   useLoginMutation,
   useGetUsersQuery,
   useCreateUserMutation,
+  useGetUserByIdQuery,
   useGetRecipesQuery,
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,
