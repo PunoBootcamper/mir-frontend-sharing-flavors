@@ -5,7 +5,11 @@ import { useImageLoader } from "../../hooks/useImageLoader";
 import CommentForm from "../comments/CommentForm";
 import CommentsList from "../comments/CommentList";
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
-
+import { Comment } from "../../interfaces";
+import {
+  useGetCommentsQuery,
+  useCreateCommentMutation,
+} from "../../app/apis/compartiendoSabores.api";
 const commentsData = [
   {
     id: 1,
@@ -45,13 +49,25 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
     console.log("funcion para agrefar a favoritos");
   };
 
-  const handleSubmittedComment = (rating: number, comment: string) => {
-    console.log(rating, comment);
-    console.log("funcion para enviar comentario");
-    console.log(_id);
-  };
-
+  const [createComment] = useCreateCommentMutation();
+  const { data: comments } = useGetCommentsQuery(_id ?? "");
   const { data: user, error, isLoading } = useGetUserByIdQuery(user_id ?? "");
+  console.log("Comentarios:", comments);
+
+  const handleSubmittedComment = async (rating: number, comment: string) => {
+    try {
+      const newComment: Partial<Comment> = {
+        user_id,
+        recipe_id: _id,
+        rating,
+        comment,
+      };
+      await createComment(newComment);
+      console.log("Nuevo comentario:", newComment);
+    } catch (error) {
+      console.log("Error al enviar el comentario", error);
+    }
+  };
 
   return (
     <div className="w-full bg-gray-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

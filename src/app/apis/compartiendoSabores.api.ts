@@ -6,6 +6,7 @@ import {
   UserCredentials,
   LoginResponse,
   Recipe,
+  Comment,
 } from "../../interfaces/index";
 
 export const compartiendoSaboresApi = createApi({
@@ -46,6 +47,16 @@ export const compartiendoSaboresApi = createApi({
         url: `api/recipe/${id}`,
       }),
     }),
+    getComments: builder.query<Comment[], string>({
+      query: (recipeId) => `api/comment/${recipeId}`,
+    }),
+    createComment: builder.mutation<Comment, Partial<Comment>>({
+      query: (comment) => ({
+        url: `api/comment/`,
+        method: "POST",
+        body: comment,
+      }),
+    }),
   }),
 });
 
@@ -56,4 +67,6 @@ export const {
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,
   useGetUserByIdQuery,
+  useCreateCommentMutation,
+  useGetCommentsQuery,
 } = compartiendoSaboresApi;
