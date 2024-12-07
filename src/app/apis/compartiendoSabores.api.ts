@@ -49,7 +49,6 @@ export const compartiendoSaboresApi = createApi({
       query: () => "api/recipe/",
       providesTags: ["Recipes"],
     }),
-
     // Chat endpoint
     createChat: builder.mutation<Chat, { owner_id: string; friend_id: string }>(
       {
@@ -93,9 +92,12 @@ export const {
   useGetRecipesQuery,
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,
+
   useCreateChatMutation,
   useCreateMessageMutation,
   useGetChatsByUserIdQuery,
   useGetMessagesByChatIdQuery,
   useGetOneChatQuery,
+  useGetUserByIdQuery,
+
 } = compartiendoSaboresApi;
