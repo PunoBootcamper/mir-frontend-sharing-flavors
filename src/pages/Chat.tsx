@@ -35,6 +35,13 @@ const Chat = () => {
     }
   };
 
+  const newDate = (data: string) => {
+    const dateMongoDB = new Date(data);
+    const hour = dateMongoDB.getHours().toString().padStart(2, "0");
+    const minute = dateMongoDB.getMinutes().toString().padStart(2, "0");
+    return `${hour}:${minute}`;
+  };
+
   const sortData = <T extends Message | iChat>(data: T[]): T[] => {
     const sortedData = [...data].sort((a, b) => {
       const fechaA = new Date(a.updatedAt).getTime();
@@ -44,7 +51,6 @@ const Chat = () => {
     if (data.length > 0 && "members" in data[0]) {
       return sortedData.reverse() as T[];
     }
-
     return sortedData;
   };
 
@@ -91,15 +97,12 @@ const Chat = () => {
 
   useEffect(() => {}, []);
 
-  const [isConnected, setIsConnected] = useState(false); // puede ser usado para interfaz
+  const [isConnected, setIsConnected] = useState(false);
   useEffect(() => {
     socket.on("connect", () => setIsConnected(true));
     socket.emit("register", userCredentials._id);
     socket.on("userExists", () => console.log("User already exists"));
     socket.on("login", () => console.log("Logueado correctamente"));
-    // socket.on("chat_message", (data) => {
-    //   setMensajes((mensajes) => [...mensajes, data]);
-    // });
     socket.on("sendMessage", async () => {
       await refetch();
       scrollToBottom();
@@ -114,14 +117,16 @@ const Chat = () => {
   return (
     <>
       <Navbar />
-      <div className="grid grid-cols-5 min-h-screen bg-gray-900">
+      <div className="grid grid-cols-5 min-h-screen bg-gray-900 text-white">
         {/* Sidebar de Chats */}
-        <div className="col-span-1 border-r border-white p-4">
+        <div className="col-span-1 border-r border-gray-700 p-4">
           <ArrowBackIcon
             className="text-white text-3xl mb-4 cursor-pointer"
             onClick={() => navigate(-1)}
           />
-          <h2 className="text-white text-center mb-4">CHATS</h2>
+          <h2 className="text-white text-center mb-4 text-xl font-semibold">
+            CHATS
+          </h2>
           <div className="overflow-y-auto h-[calc(100vh-8rem)]">
             {myChatsSorted.map((chat, index) => {
               const friendUser = users.find(
@@ -133,17 +138,16 @@ const Chat = () => {
               return (
                 <div
                   key={index}
-                  className="cursor-pointer p-2 hover:bg-gray-700"
+                  className="cursor-pointer p-2 hover:bg-gray-800 rounded-lg"
                   onClick={() => {
-                    if (friendUser) {
-                      // Aseguramos que friendUser no sea undefined
-                      handleOpenChat(friendUser, chat);
-                    }
+                    if (friendUser) handleOpenChat(friendUser, chat);
                   }}
                 >
-                  <p className="text-white">
+                  <p className="text-white font-medium">
                     {friendUser?.first_name} {friendUser?.last_name}{" "}
-                    {isConnected ? "*" : "*"}
+                    {isConnected && (
+                      <span className="text-green-500 text-sm">●</span>
+                    )}
                   </p>
                 </div>
               );
@@ -152,9 +156,9 @@ const Chat = () => {
         </div>
 
         {/* Área de Mensajes */}
-        <div className="col-span-4 p-4 flex flex-col">
-          <div className="flex items-center mb-4">
-            <h2 className="text-white text-2xl">
+        <div className="col-span-4 flex flex-col">
+          <div className="flex items-center p-4 bg-gray-800">
+            <h2 className="text-xl font-bold">
               {friendSelected
                 ? `${friendSelected.first_name} ${friendSelected.last_name}`
                 : "Selecciona un chat"}
@@ -162,7 +166,7 @@ const Chat = () => {
           </div>
 
           <div
-            className="flex-1 overflow-y-auto border p-4"
+            className="flex-1 overflow-y-auto p-4 bg-gray-700"
             ref={conversationRef}
           >
             {myMessagesSorted.map((message, index) => {
@@ -170,32 +174,41 @@ const Chat = () => {
               return (
                 <div
                   key={index}
-                  className={`mb-2 ${isFriend ? "text-left" : "text-right"}`}
+                  className={`mb-4 flex ${
+                    isFriend ? "justify-start" : "justify-end"
+                  }`}
                 >
-                  <p
-                    className={`inline-block p-2 rounded ${isFriend ? "bg-blue-500" : "bg-green-500"}`}
+                  <div
+                    className={`p-3 rounded-lg max-w-xs ${
+                      isFriend
+                        ? "bg-blue-600 text-white"
+                        : "bg-green-600 text-white"
+                    }`}
                   >
-                    {message.text}
-                  </p>
+                    <p className="text-sm">{message.text}</p>
+                    <span className="text-xs text-gray-300">
+                      {newDate(message.updatedAt)}
+                    </span>
+                  </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-4 flex">
+          <div className="p-4 bg-gray-800 flex">
             <input
               type="text"
-              className="flex-1 p-2 rounded-l"
+              className="flex-1 p-3 rounded-l-lg bg-gray-700 text-white focus:outline-none"
               placeholder="Escribe un mensaje..."
               value={form.text}
-              onChange={({ target }) => {
-                inputForm(target.value);
-              }}
+              onChange={({ target }) => inputForm(target.value)}
             />
-            <SendIcon
-              className="bg-blue-500 text-white p-2 rounded-r cursor-pointer"
+            <button
+              className="p-3 bg-blue-600 rounded-r-lg text-white hover:bg-blue-500"
               onClick={handleSendMessage}
-            />
+            >
+              <SendIcon />
+            </button>
           </div>
         </div>
       </div>
