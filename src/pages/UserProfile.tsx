@@ -41,7 +41,7 @@ const UserProfile = () => {
         owner_id: userCredentials._id,
         friend_id: id || "",
       }).unwrap();
-      navigate("/chat");
+      navigate("/chats");
     } catch (error) {
       alert(JSON.stringify(error));
     }
