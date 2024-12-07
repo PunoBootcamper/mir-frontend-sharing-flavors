@@ -38,7 +38,7 @@ const UserProfile = () => {
   const handleOpenChat = async () => {
     try {
       await createChat({
-        owner_id: userCredentials.id,
+        owner_id: userCredentials._id,
         friend_id: id || "",
       }).unwrap();
       navigate("/chat");

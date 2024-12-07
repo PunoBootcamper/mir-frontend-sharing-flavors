@@ -71,7 +71,7 @@ export const compartiendoSaboresApi = createApi({
     // Message endpoint
     createMessage: builder.mutation<Message, Partial<Message>>({
       query: (message) => ({
-        url: "api/message/create",
+        url: "api/message/",
         method: "POST",
         body: message,
       }),
