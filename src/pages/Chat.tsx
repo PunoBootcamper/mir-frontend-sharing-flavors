@@ -22,9 +22,7 @@ const Chat = () => {
   const [friendSelected, setFriendSelected] = useState<User>();
   const [chatSelected, setChatSelected] = useState<iChat>();
 
-  const { data: myChats = [] } = useGetChatsByUserIdQuery(
-    userCredentials.profile.email,
-  );
+  const { data: myChats = [] } = useGetChatsByUserIdQuery(userCredentials._id);
   const { data: users = [] } = useGetUsersQuery();
   const { data: myMessages = [], refetch } = useGetMessagesByChatIdQuery(
     chatSelected?._id || "",
@@ -45,7 +43,7 @@ const Chat = () => {
     const message = {
       ...form,
       chat_id: chatSelected?._id,
-      sender_id: userCredentials.profile.email,
+      sender_id: userCredentials._id,
     };
 
     try {
@@ -74,14 +72,14 @@ const Chat = () => {
     };
 
     socket.on("connect", () => console.log("Connected to socket"));
-    socket.emit("register", userCredentials.profile.email);
+    socket.emit("register", userCredentials._id);
     socket.on("sendMessage", handleSendMessage);
 
     return () => {
       socket.off("connect");
       socket.off("sendMessage", handleSendMessage);
     };
-  }, [userCredentials.profile.email, refetch]);
+  }, [userCredentials._id, refetch]);
   return (
     <>
       <Navbar />
@@ -113,7 +111,7 @@ const Chat = () => {
                   (user) =>
                     user._id ===
                     chat.members.find(
-                      (memberId) => memberId !== userCredentials.id,
+                      (memberId) => memberId !== userCredentials._id,
                     ),
                 );
 
@@ -166,7 +164,7 @@ const Chat = () => {
                   <div
                     key={index}
                     className={`p-2 ${
-                      message.sender_id === userCredentials.id
+                      message.sender_id === userCredentials._id
                         ? "text-right"
                         : "text-left"
                     }`}
