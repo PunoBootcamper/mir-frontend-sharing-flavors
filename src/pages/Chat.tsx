@@ -28,10 +28,19 @@ const Chat = () => {
   const [createMessage] = useCreateMessageMutation();
   const navigate = useNavigate();
   const conversationRef = useRef<HTMLDivElement>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (smooth = false) => {
     if (conversationRef.current) {
-      conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
+      if (smooth) {
+        conversationRef.current.scrollTo({
+          top: conversationRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      } else {
+        conversationRef.current.scrollTop =
+          conversationRef.current.scrollHeight;
+      }
     }
   };
 
@@ -80,6 +89,7 @@ const Chat = () => {
         message: response,
         selectUser: friendSelected?._id,
       });
+      scrollToBottom(true);
     } catch (error) {
       alert(JSON.stringify(error));
     }
@@ -95,17 +105,21 @@ const Chat = () => {
     await refetch();
   };
 
-  useEffect(() => {}, []);
+  const handleScroll = () => {
+    if (conversationRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = conversationRef.current;
+      setIsUserScrolling(scrollTop + clientHeight < scrollHeight - 50);
+    }
+  };
 
-  const [isConnected, setIsConnected] = useState(false);
   useEffect(() => {
-    socket.on("connect", () => setIsConnected(true));
+    socket.on("connect", () => console.log("Conectado al socket"));
     socket.emit("register", userCredentials._id);
     socket.on("userExists", () => console.log("User already exists"));
     socket.on("login", () => console.log("Logueado correctamente"));
     socket.on("sendMessage", async () => {
       await refetch();
-      scrollToBottom();
+      scrollToBottom(true);
     });
 
     return () => {
@@ -114,10 +128,28 @@ const Chat = () => {
     };
   }, [refetch, userCredentials._id]);
 
+  useEffect(() => {
+    if (!isUserScrolling) {
+      scrollToBottom(true);
+    }
+  }, [myMessagesSorted]);
+
+  useEffect(() => {
+    if (conversationRef.current) {
+      conversationRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (conversationRef.current) {
+        conversationRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <>
       <Navbar />
-      <div className="grid grid-cols-5 min-h-screen bg-gray-900 text-white">
+      <div className="grid grid-cols-5 min-h-screen bg-gray-900 pt-20">
         {/* Sidebar de Chats */}
         <div className="col-span-1 border-r border-gray-700 p-4">
           <ArrowBackIcon
@@ -127,7 +159,7 @@ const Chat = () => {
           <h2 className="text-white text-center mb-4 text-xl font-semibold">
             CHATS
           </h2>
-          <div className="overflow-y-auto h-[calc(100vh-8rem)]">
+          <div className="overflow-y-auto h-[calc(100vh-10rem)]">
             {myChatsSorted.map((chat, index) => {
               const friendUser = users.find(
                 (user) =>
@@ -145,9 +177,7 @@ const Chat = () => {
                 >
                   <p className="text-white font-medium">
                     {friendUser?.first_name} {friendUser?.last_name}{" "}
-                    {isConnected && (
-                      <span className="text-green-500 text-sm">●</span>
-                    )}
+                    <span className="text-green-500 text-sm">●</span>
                   </p>
                 </div>
               );
@@ -158,25 +188,25 @@ const Chat = () => {
         {/* Área de Mensajes */}
         <div className="col-span-4 flex flex-col">
           <div className="flex items-center p-4 bg-gray-800">
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl font-bold text-white">
               {friendSelected
                 ? `${friendSelected.first_name} ${friendSelected.last_name}`
                 : "Selecciona un chat"}
             </h2>
           </div>
 
+          {/* Contenedor de Mensajes con Scroll */}
           <div
             className="flex-1 overflow-y-auto p-4 bg-gray-700"
             ref={conversationRef}
+            style={{ maxHeight: "calc(100vh - 180px)" }} // Ajusta la altura para que solo el área de mensajes tenga scroll
           >
             {myMessagesSorted.map((message, index) => {
               const isFriend = message.sender_id !== userCredentials._id;
               return (
                 <div
                   key={index}
-                  className={`mb-4 flex ${
-                    isFriend ? "justify-start" : "justify-end"
-                  }`}
+                  className={`mb-4 flex ${isFriend ? "justify-start" : "justify-end"}`}
                 >
                   <div
                     className={`p-3 rounded-lg max-w-xs ${
@@ -195,6 +225,7 @@ const Chat = () => {
             })}
           </div>
 
+          {/* Campo para Escribir Mensajes */}
           <div className="p-4 bg-gray-800 flex">
             <input
               type="text"
