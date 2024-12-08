@@ -88,7 +88,6 @@ export const {
   useLoginMutation,
   useGetUsersQuery,
   useCreateUserMutation,
-  useGetUserByIdQuery,
   useGetRecipesQuery,
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,
@@ -99,5 +98,4 @@ export const {
   useGetMessagesByChatIdQuery,
   useGetOneChatQuery,
   useGetUserByIdQuery,
-
 } = compartiendoSaboresApi;

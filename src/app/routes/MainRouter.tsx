@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 
 import { Example, Home, Login, Register, Chat, UserProfile } from "../../pages";
 
-
 import AddRecipe from "../../pages/AddRecipe";
 import Recipe from "../../pages/Recipe";
 import NotFound from "../../pages/NotFound";
