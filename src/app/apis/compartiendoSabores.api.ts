@@ -82,11 +82,19 @@ export const compartiendoSaboresApi = createApi({
       query: () => "api/recipe/",
     }),
     updateRecipe: builder.mutation<Recipe, Partial<Recipe>>({
-      query: (recipe) => ({
-        url: `api/recipe/${recipe._id}`,
-        method: "PATCH",
-        body: recipe,
-      }),
+      query: (recipe) => {
+        const token = JSON.parse(localStorage.getItem("user") || "{}")?.token;
+        return {
+          url: `api/recipe/${recipe._id}`,
+          method: "PATCH",
+          body: recipe,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+
       invalidatesTags: (_result, _error, { _id }) =>
         _id ? [{ type: "Recipe", id: _id }] : [],
       async onQueryStarted(updatedRecipe, { dispatch, queryFulfilled }) {
