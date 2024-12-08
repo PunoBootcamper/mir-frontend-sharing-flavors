@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../ui/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
-import AddButton from "../ui/Button/AddButton";
 
 const Layout: React.FC = () => {
   const [navbarHeight, setNavbarHeight] = useState(0);
@@ -23,7 +22,6 @@ const Layout: React.FC = () => {
           <Outlet />
         </main>
       </div>
-      <AddButton />
     </>
   );
 };

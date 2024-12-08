@@ -207,7 +207,7 @@ const AddRecipe: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="md:fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors shadow-lg"
+              className="fixed bottom-8 right-8 bg-secondary hover:bg-[#b02036] text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
             >
               {loadingImg
                 ? "Cargando imagen..."
