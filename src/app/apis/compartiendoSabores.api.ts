@@ -13,7 +13,7 @@ import {
 
 export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
-  tagTypes: ["Recipes"],
+  tagTypes: ["Recipe"],
   endpoints: (builder) => ({
     getUsers: builder.query<User[], void>({
       query: () => "api/user/",
@@ -44,11 +44,9 @@ export const compartiendoSaboresApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Recipes"],
     }),
     getRecipes: builder.query<Recipe[], void>({
       query: () => "api/recipe/",
-      providesTags: ["Recipes"],
     }),
     updateRecipe: builder.mutation<Recipe, Partial<Recipe>>({
       query: (recipe) => ({
@@ -56,7 +54,34 @@ export const compartiendoSaboresApi = createApi({
         method: "PATCH",
         body: recipe,
       }),
-      invalidatesTags: ["Recipes"],
+      invalidatesTags: (_result, _error, { _id }) =>
+        _id ? [{ type: "Recipe", id: _id }] : [],
+      async onQueryStarted(updatedRecipe, { dispatch, queryFulfilled }) {
+        // Actualización optimista
+        const patchResult = dispatch(
+          compartiendoSaboresApi.util.updateQueryData(
+            "getRecipes",
+            undefined, // No se requiere un parámetro para getRecipes
+            (draft) => {
+              // Encuentra la receta en la lista y aplica los cambios
+              const index = draft.findIndex(
+                (recipe) => recipe._id === updatedRecipe._id,
+              );
+              if (index !== -1) {
+                draft[index] = { ...draft[index], ...updatedRecipe };
+              }
+            },
+          ),
+        );
+
+        try {
+          // Espera la confirmación de la API
+          await queryFulfilled;
+        } catch {
+          // Revierte los cambios locales si la API falla
+          patchResult.undo();
+        }
+      },
     }),
     // Chat endpoint
     createChat: builder.mutation<Chat, { owner_id: string; friend_id: string }>(
@@ -89,6 +114,7 @@ export const compartiendoSaboresApi = createApi({
       query: (id) => ({
         url: `api/recipe/${id}`,
       }),
+      providesTags: (_result, _error, id) => [{ type: "Recipe", id }],
     }),
     getComments: builder.query<Comment[], string>({
       query: (recipeId) => `api/comment/${recipeId}`,
