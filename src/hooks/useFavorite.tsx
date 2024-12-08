@@ -8,11 +8,6 @@ export const useFavorite = () => {
 
   const handleFavorite = async (recipeId: string, isFavorite: boolean) => {
     try {
-      console.log("Función para agregar/remover de favoritos");
-      console.log({ "ID receta": recipeId });
-      console.log({ "ID usuario": loggedUser?._id });
-      console.log({ "Favoritos actuales": loggedUser?.profile.favorites });
-
       // Obtiene favoritos actuales del usuario
       const localStorageData = localStorage.getItem("user");
       const parsedData = localStorageData ? JSON.parse(localStorageData) : null;
@@ -28,11 +23,9 @@ export const useFavorite = () => {
         newFavorites = currentFavorites.filter(
           (favorite: string) => favorite !== recipeId,
         );
-        console.log(`Removiendo de favoritos la receta con ID: ${recipeId}`);
       } else {
         // Agregar a favoritos
         newFavorites = [...currentFavorites, recipeId];
-        console.log(`Agregando a favoritos la receta con ID: ${recipeId}`);
       }
 
       // Actualizar localStorage
@@ -52,8 +45,6 @@ export const useFavorite = () => {
         _id: loggedUser?._id || "",
         favorites: newFavorites,
       });
-
-      console.log("Favoritos actualizados:", newFavorites);
     } catch (error) {
       console.error("Error al actualizar favoritos:", error);
     }

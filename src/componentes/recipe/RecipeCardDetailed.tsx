@@ -36,9 +36,6 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
 
   const isFavorite = !!favorites.includes(_id);
 
-  // Del local storage
-  console.log("favorites", parsedData.profile.favorites);
-
   const { handleFavorite } = useFavorite();
 
   const [createComment] = useCreateCommentMutation();
