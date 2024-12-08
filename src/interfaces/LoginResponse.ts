@@ -6,5 +6,6 @@ export interface LoginResponse {
     avatar: string;
     role: string;
     email: string;
+    favorites: string[];
   };
 }
