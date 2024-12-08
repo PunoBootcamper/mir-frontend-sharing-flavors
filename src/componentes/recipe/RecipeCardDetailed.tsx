@@ -13,6 +13,8 @@ import {
 } from "../../app/apis/compartiendoSabores.api";
 import { RootState } from "../../app/store/store";
 import { useSelector } from "react-redux";
+import { useFavorite } from "../../hooks/useFavorite";
+import FavoriteIcon from "./FavoriteIcon";
 
 const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
@@ -28,9 +30,16 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
 
   const loggedUser = useSelector((state: RootState) => state.auth.user);
 
-  const handleClicked = () => {
-    console.log("funcion para agregar a favoritos");
-  };
+  const localStorageData = localStorage.getItem("user");
+  const parsedData = localStorageData ? JSON.parse(localStorageData) : null;
+  const favorites = parsedData?.profile?.favorites || [];
+
+  const isFavorite = !!favorites.includes(_id);
+
+  // Del local storage
+  console.log("favorites", parsedData.profile.favorites);
+
+  const { handleFavorite } = useFavorite();
 
   const [createComment] = useCreateCommentMutation();
   const { data: comments } = useGetCommentsQuery(_id ?? "");
@@ -67,13 +76,10 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
           <Stars rating={average_rating} />
         </div>
 
-        {/* Botón de Favoritos */}
-        <button
-          onClick={handleClicked}
-          className="bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Añadir a Favoritos
-        </button>
+        <FavoriteIcon
+          isFavorite={isFavorite}
+          onClick={() => _id && handleFavorite(_id, isFavorite)}
+        />
       </div>
 
       {/* Contenido */}

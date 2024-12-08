@@ -3,11 +3,10 @@ import { useImageLoader } from "../../hooks/useImageLoader";
 import { Link } from "react-router-dom";
 import Stars from "./Stars";
 import Views from "./Views";
-import { RootState } from "../../app/store/store";
-import { useSelector } from "react-redux";
-
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
 import { useUpdateRecipeMutation } from "../../app/apis/compartiendoSabores.api";
+import { useFavorite } from "../../hooks/useFavorite";
+import FavoriteIcon from "./FavoriteIcon";
 
 interface RecipeCardProps extends Recipe {
   isFavorite: boolean;
@@ -24,7 +23,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
 }) => {
   const imgURL = useImageLoader(images);
   const path = `/recipe/${_id}`;
-  const loggedUser = useSelector((state: RootState) => state.auth.user);
   const {
     data: user,
     error: errorUser,
@@ -32,7 +30,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   } = useGetUserByIdQuery(user_id);
 
   const [updateRecipe] = useUpdateRecipeMutation();
-
   //Actualizar las vistas de la receta
   const handleClicked = async () => {
     try {
@@ -45,12 +42,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     }
   };
 
-  const handleFavorite = () => {
-    console.log("Función para agregar a favoritos");
-    console.log({ Receta: title, "ID receta": _id });
-    console.log({ "ID usuario": loggedUser?._id });
-    console.log({ " favorito": loggedUser?.profile.favorites });
-  };
+  const { handleFavorite } = useFavorite();
 
   return (
     <div className="w-full h-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -110,24 +102,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         {/* Vistas y botón de favoritos */}
         <div className="flex items-center justify-between">
           <Views views={views} />
-          {
-            // Si la receta ya está en favoritos
-            isFavorite ? (
-              <button
-                onClick={handleFavorite}
-                className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-              >
-                Favoritos
-              </button>
-            ) : (
-              <button
-                onClick={handleFavorite}
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Favoritos
-              </button>
-            )
-          }
+
+          <FavoriteIcon
+            isFavorite={isFavorite}
+            onClick={() => handleFavorite(_id, isFavorite)}
+          />
         </div>
       </div>
     </div>
