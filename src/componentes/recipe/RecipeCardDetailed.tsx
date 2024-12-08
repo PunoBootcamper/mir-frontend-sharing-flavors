@@ -11,6 +11,8 @@ import {
   useGetUserByIdQuery,
   useCreateCommentMutation,
 } from "../../app/apis/compartiendoSabores.api";
+import { RootState } from "../../app/store/store";
+import { useSelector } from "react-redux";
 
 const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
@@ -23,6 +25,9 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   _id,
 }) => {
   const imgURL = useImageLoader(images);
+
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+
   const handleClicked = () => {
     console.log("funcion para agregar a favoritos");
   };
@@ -35,7 +40,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   const handleSubmittedComment = async (rating: number, comment: string) => {
     try {
       const newComment: Partial<Comment> = {
-        user_id,
+        user_id: loggedUser?._id,
         recipe_id: _id,
         rating,
         comment,

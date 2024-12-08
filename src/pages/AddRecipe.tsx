@@ -9,6 +9,8 @@ import { transformIRecipeFormToRecipe } from "../utils/recipeUtils";
 import { useCreateRecipeMutation } from "../app/apis/compartiendoSabores.api";
 import { recipeSchema } from "../utils/yupSchemas";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../app/store/store";
+import { useSelector } from "react-redux";
 
 const AddRecipe: React.FC = () => {
   const [createRecipe, { isLoading: loadingRecipe }] =
@@ -38,6 +40,8 @@ const AddRecipe: React.FC = () => {
     control,
   });
 
+  const user = useSelector((state: RootState) => state.auth.user);
+
   const navigate = useNavigate();
 
   const handleAddIngredient = () => {
@@ -53,7 +57,11 @@ const AddRecipe: React.FC = () => {
       console.log("Datos del formulario:", data);
       const uploadedUrl = await uploadImage(data.image);
       console.log("Imagen subida:", uploadedUrl);
-      const recipe = transformIRecipeFormToRecipe(data, "1", uploadedUrl || "");
+      const recipe = transformIRecipeFormToRecipe(
+        data,
+        user?._id || "",
+        uploadedUrl || "",
+      );
       console.log("Receta a enviar:", recipe);
       await createRecipe(recipe).unwrap();
       navigate("/home");
