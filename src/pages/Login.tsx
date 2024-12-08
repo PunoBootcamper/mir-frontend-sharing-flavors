@@ -39,6 +39,7 @@ export default function Login() {
       navigate("/home");
     } catch (error) {
       console.error("Error:", error);
+      console.error("Los datos ingresados son incorrectos");
     }
   };
 
@@ -114,6 +115,7 @@ export default function Login() {
           <CommonButton
             text="Registrarse"
             onClick={() => navigate("/register")}
+            type="button"
           />
         </div>
       </form>

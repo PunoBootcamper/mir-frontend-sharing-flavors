@@ -6,3 +6,9 @@ export interface Comment {
   comment: string;
   __v: number;
 }
+
+export interface CommentWithAvatar extends Comment {
+  photo_url: string;
+  first_name: string;
+  last_name: string;
+}

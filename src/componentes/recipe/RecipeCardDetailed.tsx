@@ -4,31 +4,15 @@ import Views from "./Views";
 import { useImageLoader } from "../../hooks/useImageLoader";
 import CommentForm from "../comments/CommentForm";
 import CommentsList from "../comments/CommentList";
-import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
-
-const commentsData = [
-  {
-    id: 1,
-    name: "Juan Pérez",
-    text: "Deliciosa receta, la intentaré este fin de semana.",
-    avatar: "https://via.placeholder.com/40",
-    rating: 4,
-  },
-  {
-    id: 2,
-    name: "María López",
-    text: "Me encantó, le añadí más especias y quedó genial.",
-    avatar: "https://via.placeholder.com/40",
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: "Carlos Rodríguez",
-    text: "¿Qué otro ingrediente podría sustituir el ajo?",
-    avatar: "https://via.placeholder.com/40",
-    rating: 3,
-  },
-];
+import {} from "../../app/apis/compartiendoSabores.api";
+import { Comment } from "../../interfaces";
+import {
+  useGetCommentsQuery,
+  useGetUserByIdQuery,
+  useCreateCommentMutation,
+} from "../../app/apis/compartiendoSabores.api";
+import { RootState } from "../../app/store/store";
+import { useSelector } from "react-redux";
 
 const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
@@ -41,17 +25,32 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   _id,
 }) => {
   const imgURL = useImageLoader(images);
+
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+
   const handleClicked = () => {
-    console.log("funcion para agrefar a favoritos");
+    console.log("funcion para agregar a favoritos");
   };
 
-  const handleSubmittedComment = (rating: number, comment: string) => {
-    console.log(rating, comment);
-    console.log("funcion para enviar comentario");
-    console.log(_id);
-  };
-
+  const [createComment] = useCreateCommentMutation();
+  const { data: comments } = useGetCommentsQuery(_id ?? "");
   const { data: user, error, isLoading } = useGetUserByIdQuery(user_id ?? "");
+  console.log("Comentarios:", comments);
+
+  const handleSubmittedComment = async (rating: number, comment: string) => {
+    try {
+      const newComment: Partial<Comment> = {
+        user_id: loggedUser?._id,
+        recipe_id: _id,
+        rating,
+        comment,
+      };
+      await createComment(newComment);
+      console.log("Nuevo comentario:", newComment);
+    } catch (error) {
+      console.log("Error al enviar el comentario", error);
+    }
+  };
 
   return (
     <div className="w-full bg-gray-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -138,7 +137,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
         </div>
 
         {/* Comentarios */}
-        <CommentsList comments={commentsData} />
+        <CommentsList comments={comments ?? []} />
         <CommentForm onSubmit={handleSubmittedComment} />
       </div>
     </div>

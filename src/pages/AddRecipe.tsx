@@ -9,6 +9,8 @@ import { transformIRecipeFormToRecipe } from "../utils/recipeUtils";
 import { useCreateRecipeMutation } from "../app/apis/compartiendoSabores.api";
 import { recipeSchema } from "../utils/yupSchemas";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../app/store/store";
+import { useSelector } from "react-redux";
 
 const AddRecipe: React.FC = () => {
   const [createRecipe, { isLoading: loadingRecipe }] =
@@ -38,6 +40,8 @@ const AddRecipe: React.FC = () => {
     control,
   });
 
+  const user = useSelector((state: RootState) => state.auth.user);
+
   const navigate = useNavigate();
 
   const handleAddIngredient = () => {
@@ -53,7 +57,11 @@ const AddRecipe: React.FC = () => {
       console.log("Datos del formulario:", data);
       const uploadedUrl = await uploadImage(data.image);
       console.log("Imagen subida:", uploadedUrl);
-      const recipe = transformIRecipeFormToRecipe(data, "1", uploadedUrl || "");
+      const recipe = transformIRecipeFormToRecipe(
+        data,
+        user?._id || "",
+        uploadedUrl || "",
+      );
       console.log("Receta a enviar:", recipe);
       await createRecipe(recipe).unwrap();
       navigate("/home");
@@ -207,7 +215,7 @@ const AddRecipe: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="md:fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors shadow-lg"
+              className="fixed bottom-8 right-8 bg-secondary hover:bg-[#b02036] text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
             >
               {loadingImg
                 ? "Cargando imagen..."
