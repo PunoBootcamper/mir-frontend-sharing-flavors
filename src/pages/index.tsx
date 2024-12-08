@@ -7,4 +7,3 @@ export { default as Recipe } from "./AddRecipe";
 export { default as Example } from "./Example";
 export { default as NotFound } from "./NotFound";
 export { default as UserProfile } from "./UserProfile";
-
