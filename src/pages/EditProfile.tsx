@@ -113,7 +113,7 @@ const EditProfile = () => {
 
       <div className="my-8 flex flex-col items-center">
         <Avatar
-          className="w-24 h-24 border border-white mb-4"
+          className="min-w-24 min-h-24 border border-white mb-4"
           alt={data?.first_name}
           src={form?.photo_url}
         />
