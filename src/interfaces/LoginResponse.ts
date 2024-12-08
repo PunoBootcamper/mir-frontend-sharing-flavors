@@ -1,5 +1,6 @@
 export interface LoginResponse {
   token: string;
+  _id: string;
   profile: {
     fullName: string;
     avatar: string;
