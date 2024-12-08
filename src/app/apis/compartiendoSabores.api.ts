@@ -15,12 +15,44 @@ export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   tagTypes: ["Recipe"],
   endpoints: (builder) => ({
+    /*end points user  */
     getUsers: builder.query<User[], void>({
       query: () => "api/user/",
     }),
 
     getUserById: builder.query<User, string>({
       query: (id) => `api/user/${id}`,
+    }),
+
+    updateUser: builder.mutation<User, Partial<User>>({
+      query: (body) => {
+        const user = JSON.parse(localStorage.getItem("user") || "");
+        return {
+          url: `api/user/${body._id}`,
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
+          body,
+        };
+      },
+      async onQueryStarted({ _id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          compartiendoSaboresApi.util.updateQueryData(
+            "getUserById",
+            _id || "",
+            (draft) => {
+              Object.assign(draft, patch);
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
 
     createUser: builder.mutation<User, Partial<User>>({
@@ -30,6 +62,7 @@ export const compartiendoSaboresApi = createApi({
         body,
       }),
     }),
+
     login: builder.mutation<LoginResponse, UserCredentials>({
       query: (credentials) => ({
         url: "/auth/local/login",
@@ -163,6 +196,7 @@ export const {
   useLoginMutation,
   useGetUsersQuery,
   useCreateUserMutation,
+  useUpdateUserMutation,
   useGetRecipesQuery,
   useCreateRecipeMutation,
   useGetRecipeByIdQuery,

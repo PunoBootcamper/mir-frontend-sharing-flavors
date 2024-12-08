@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-
 import { Example, Home, Login, Register, Chat, UserProfile } from "../../pages";
-
 import AddRecipe from "../../pages/AddRecipe";
 import Recipe from "../../pages/Recipe";
 import NotFound from "../../pages/NotFound";
 import Layout from "../../componentes/layouts/Layout";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import EditProfile from "../../pages/EditProfile";
 const MainRouter = () => {
   return (
     <Routes>
@@ -27,6 +26,7 @@ const MainRouter = () => {
         <Route path="/add-recipe" element={<AddRecipe />} />
         <Route path="/chats" element={<Chat />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile/:id" element={<UserProfile />} />
       </Route>
     </Routes>
