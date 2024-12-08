@@ -25,11 +25,18 @@ export const compartiendoSaboresApi = createApi({
     }),
 
     updateUser: builder.mutation<User, Partial<User>>({
-      query: (body) => ({
-        url: `user/update/${body._id}`,
-        method: "PUT",
-        body,
-      }),
+      query: (body) => {
+        const user = JSON.parse(localStorage.getItem("user") || "");
+        return {
+          url: `api/user/${body._id}`,
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
+          body,
+        };
+      },
       async onQueryStarted({ _id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           compartiendoSaboresApi.util.updateQueryData(

@@ -17,15 +17,16 @@ const EditProfile = () => {
   const isUserAuthenticated = localStorage.getItem("user");
   const userCredentials =
     isUserAuthenticated && JSON.parse(isUserAuthenticated);
-  const { data, isSuccess } = useGetUserByIdQuery(userCredentials.id);
+  const { data, isSuccess } = useGetUserByIdQuery(userCredentials._id);
   const navigate = useNavigate();
   const [updateUser] = useUpdateUserMutation();
+
   const [form, setForm] = useState<Partial<User>>({
-    first_name: data?.first_name,
-    last_name: data?.last_name,
-    phone_number: data?.phone_number,
-    description: data?.description,
-    photo_url: data?.photo_url,
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    description: "",
+    photo_url: "",
   });
 
   const onInputChange = (value: string, field: string) => {
@@ -37,8 +38,8 @@ const EditProfile = () => {
 
   const handleUserUpdate = async () => {
     try {
-      await updateUser({ ...form, _id: userCredentials.id }).unwrap();
-      navigate("/homepage");
+      await updateUser({ ...form, _id: userCredentials._id }).unwrap();
+      navigate("/home");
     } catch (error) {
       alert(JSON.stringify(error));
     }
@@ -50,15 +51,12 @@ const EditProfile = () => {
       inputFile.type = "file";
       inputFile.accept = "image/*";
 
-      // Esperar a que el usuario seleccione un archivo
       inputFile.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement)?.files?.[0];
         if (!file) return;
 
         try {
           const uploadedImageUrl = await uploadImageToCloudinary(file);
-
-          // Actualizar el estado con la URL de la imagen
           console.log("Uploaded Image URL:", uploadedImageUrl);
           onInputChange(uploadedImageUrl, "photo_url");
         } catch (error) {
@@ -71,15 +69,19 @@ const EditProfile = () => {
       console.error("Error in showWidgetPhotoUser:", error);
     }
   };
+
   useEffect(() => {
-    setForm({
-      first_name: data?.first_name,
-      last_name: data?.last_name,
-      phone_number: data?.phone_number,
-      description: data?.description,
-      photo_url: data?.photo_url,
-    });
-  }, [isSuccess]);
+    if (isSuccess) {
+      setForm({
+        first_name: data?.first_name || "",
+        last_name: data?.last_name || "",
+        phone_number: data?.phone_number || "",
+        description: data?.description || "",
+        photo_url: data?.photo_url || "",
+      });
+    }
+  }, [isSuccess, data]);
+
   return (
     <>
       <div className="min-h-screen bg-[#281b23] p-8">
@@ -102,7 +104,7 @@ const EditProfile = () => {
         <div className="my-10">
           <div className="flex flex-col items-center">
             <Avatar
-              className="w-1/10 h-auto border border-white my-6"
+              className="w-32 h-32 border border-white my-6"
               alt={data?.first_name}
               src={form?.photo_url}
             />
@@ -126,7 +128,7 @@ const EditProfile = () => {
                     className="w-4/5 bg-transparent"
                     disabled
                     id="outlined-disabled"
-                    value={data?.email}
+                    value={data?.email || ""}
                     sx={{
                       "& .MuiInputBase-root.Mui-disabled": {
                         "& > fieldset": { opacity: 0 },
@@ -187,9 +189,6 @@ const EditProfile = () => {
                     ></textarea>
                   </div>
                 </div>
-              </div>
-              <div className="space-y-4">
-                {/* Other fields (if required) */}
               </div>
             </div>
           </div>
