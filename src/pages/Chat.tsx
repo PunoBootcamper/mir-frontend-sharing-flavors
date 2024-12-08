@@ -46,11 +46,16 @@ const Chat = () => {
     );
 
   useEffect(() => {
-    const sorted = sortData(myMessages);
-    if (JSON.stringify(sorted) !== JSON.stringify(messages)) {
-      setMessages(sorted);
+    if (myMessages) {
+      const sorted = sortData(myMessages);
+      setMessages((prevMessages) => {
+        if (JSON.stringify(prevMessages) !== JSON.stringify(sorted)) {
+          return sorted;
+        }
+        return prevMessages;
+      });
     }
-  }, [myMessages, messages]);
+  }, [myMessages]);
 
   // Scroll al final del contenedor
   const scrollToBottom = (smooth = false) => {
@@ -195,48 +200,56 @@ const Chat = () => {
             ref={conversationRef}
             style={{ maxHeight: "calc(100vh - 180px)" }}
           >
-            {messages.map((message, index) => {
-              const isFriend = message.sender_id !== userCredentials._id;
-              return (
-                <div
-                  key={index}
-                  className={`mb-4 flex ${
-                    isFriend ? "justify-start" : "justify-end"
-                  }`}
-                >
+            {chatSelected ? (
+              messages.map((message, index) => {
+                const isFriend = message.sender_id !== userCredentials._id;
+                return (
                   <div
-                    className={`p-3 rounded-lg max-w-xs ${
-                      isFriend
-                        ? "bg-blue-600 text-white"
-                        : "bg-green-600 text-white"
+                    key={index}
+                    className={`mb-4 flex ${
+                      isFriend ? "justify-start" : "justify-end"
                     }`}
                   >
-                    <p className="text-sm">{message.text}</p>
-                    <span className="text-xs text-gray-300">
-                      {formatTime(message.updatedAt)}
-                    </span>
+                    <div
+                      className={`p-3 rounded-lg max-w-xs ${
+                        isFriend
+                          ? "bg-blue-600 text-white"
+                          : "bg-green-600 text-white"
+                      }`}
+                    >
+                      <p className="text-sm">{message.text}</p>
+                      <span className="text-xs text-gray-300">
+                        {formatTime(message.updatedAt)}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-400">
+                Selecciona un chat para comenzar la conversación.
+              </div>
+            )}
           </div>
-
           {/* Campo para Escribir Mensajes */}
-          <div className="p-4 bg-gray-800 flex">
-            <input
-              type="text"
-              className="flex-1 p-3 rounded-l-lg bg-gray-700 text-white focus:outline-none"
-              placeholder="Escribe un mensaje..."
-              value={form.text}
-              onChange={({ target }) => setForm({ text: target.value })}
-            />
-            <button
-              className="p-3 bg-blue-600 rounded-r-lg text-white hover:bg-blue-500"
-              onClick={handleSendMessage}
-            >
-              <SendIcon />
-            </button>
-          </div>
+
+          {chatSelected && (
+            <div className="p-4 bg-gray-800 flex">
+              <input
+                type="text"
+                className="flex-1 p-3 rounded-l-lg bg-gray-700 text-white focus:outline-none"
+                placeholder="Escribe un mensaje..."
+                value={form.text}
+                onChange={({ target }) => setForm({ text: target.value })}
+              />
+              <button
+                className="p-3 bg-blue-600 rounded-r-lg text-white hover:bg-blue-500"
+                onClick={handleSendMessage}
+              >
+                <SendIcon />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

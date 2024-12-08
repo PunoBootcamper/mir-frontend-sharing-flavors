@@ -25,7 +25,7 @@ const MainRouter = () => {
           <Route path="/add-recipe" element={<AddRecipe />} />
         </Route>
         <Route path="/add-recipe" element={<AddRecipe />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chats" element={<Chat />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/profile/:id" element={<UserProfile />} />
       </Route>
