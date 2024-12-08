@@ -7,7 +7,6 @@ const Recipe = () => {
   const { id } = useParams();
   const { data: recipe } = useGetRecipeByIdQuery(id || "");
 
-  console.log("Receta:", recipe);
   return (
     <div>
       <RecipeCardDetailed {...recipe} />

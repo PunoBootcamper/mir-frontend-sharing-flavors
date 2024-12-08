@@ -35,7 +35,6 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   const [createComment] = useCreateCommentMutation();
   const { data: comments } = useGetCommentsQuery(_id ?? "");
   const { data: user, error, isLoading } = useGetUserByIdQuery(user_id ?? "");
-  console.log("Comentarios:", comments);
 
   const handleSubmittedComment = async (rating: number, comment: string) => {
     try {
@@ -46,7 +45,6 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
         comment,
       };
       await createComment(newComment);
-      console.log("Nuevo comentario:", newComment);
     } catch (error) {
       console.log("Error al enviar el comentario", error);
     }

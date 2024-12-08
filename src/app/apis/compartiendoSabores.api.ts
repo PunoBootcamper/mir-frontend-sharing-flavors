@@ -50,6 +50,14 @@ export const compartiendoSaboresApi = createApi({
       query: () => "api/recipe/",
       providesTags: ["Recipes"],
     }),
+    updateRecipe: builder.mutation<Recipe, Partial<Recipe>>({
+      query: (recipe) => ({
+        url: `api/recipe/${recipe._id}`,
+        method: "PATCH",
+        body: recipe,
+      }),
+      invalidatesTags: ["Recipes"],
+    }),
     // Chat endpoint
     createChat: builder.mutation<Chat, { owner_id: string; friend_id: string }>(
       {
@@ -140,4 +148,5 @@ export const {
   useGetUserByIdQuery,
   useCreateCommentMutation,
   useGetCommentsQuery,
+  useUpdateRecipeMutation,
 } = compartiendoSaboresApi;

@@ -5,6 +5,7 @@ import Stars from "./Stars";
 import Views from "./Views";
 
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
+import { useUpdateRecipeMutation } from "../../app/apis/compartiendoSabores.api";
 
 const RecipeCard: React.FC<Recipe> = ({
   title,
@@ -17,10 +18,24 @@ const RecipeCard: React.FC<Recipe> = ({
   const imgURL = useImageLoader(images);
   const path = `/recipe/${_id}`;
 
-  const { data: user, error, isLoading } = useGetUserByIdQuery(user_id);
+  const {
+    data: user,
+    error: errorUser,
+    isLoading: isLoadingUser,
+  } = useGetUserByIdQuery(user_id);
 
+  const [updateRecipe] = useUpdateRecipeMutation();
+
+  //Actualizar las vistas de la receta
   const handleClicked = async () => {
-    console.log("Clicked");
+    try {
+      await updateRecipe({
+        _id: _id || "",
+        views: views + 1,
+      });
+    } catch (error) {
+      console.log("Error al actualizar las vistas de la receta", error);
+    }
   };
 
   return (
@@ -40,12 +55,12 @@ const RecipeCard: React.FC<Recipe> = ({
       <div className="px-5 pb-5">
         {/* Usuario */}
         <div className="flex items-center gap-4 mb-4">
-          {isLoading && (
+          {isLoadingUser && (
             <p className="text-gray-500 dark:text-gray-400">
               Cargando usuario...
             </p>
           )}
-          {error && (
+          {errorUser && (
             <>
               <img
                 src={"https://via.placeholder.com/40"}
@@ -54,7 +69,7 @@ const RecipeCard: React.FC<Recipe> = ({
               />
             </>
           )}
-          {!isLoading && !error && user && (
+          {!isLoadingUser && !errorUser && user && (
             <>
               <img
                 src={user.photo_url || "https://via.placeholder.com/40"}
