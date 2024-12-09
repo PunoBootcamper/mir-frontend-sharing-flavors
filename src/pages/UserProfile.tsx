@@ -35,6 +35,7 @@ const UserProfile = () => {
     user?.favorites.includes(recipe._id),
   );
   const navigate = useNavigate();
+
   const handleOpenChat = async () => {
     try {
       await createChat({
@@ -48,41 +49,48 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="bg-[#281b23] text-white p-12 min-h-screen">
-      <div className="absolute top-6 left-8 cursor-pointer">
-        <ArrowBackIcon className="text-3xl" onClick={() => navigate(-1)} />
-      </div>
-      {isOwnProfile && (
-        <div
-          className="absolute top-6 right-8 cursor-pointer"
-          onClick={() => navigate("/edit-profile")}
-        >
-          <EditIcon className="text-2xl" />
+    <div className="bg-[#281b23] text-white min-h-screen p-6 md:p-12">
+      {/* Encabezado con botón volver y editar */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="cursor-pointer" onClick={() => navigate(-1)}>
+          <ArrowBackIcon className="text-3xl" />
         </div>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] gap-8 mx-10">
-        <div className="flex flex-col items-center">
+        {isOwnProfile && (
+          <div
+            className="cursor-pointer"
+            onClick={() => navigate("/edit-profile")}
+          >
+            <EditIcon className="text-2xl" />
+          </div>
+        )}
+      </div>
+
+      {/* Información principal del usuario */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] gap-8">
+        <div className="flex flex-col items-center justify-center">
           <Avatar
             className="border border-white w-36 h-36"
             alt={user?.first_name}
             src={user?.photo_url}
           />
-          <h3 className="mt-2 text-2xl font-semibold">
+          <h3 className="mt-4 text-2xl font-semibold flex items-center">
             {user?.first_name} {user?.last_name}
             {isCompanyAccount && (
               <span className="text-gray-400 text-sm ml-2 font-medium">
-                Empresa/Negocio
+                (Empresa/Negocio)
               </span>
             )}
           </h3>
         </div>
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl">Recetas Compartidas</h2>
-          <h2 className="text-4xl text-gray-400">{myRecipes?.length}</h2>
+        <div className="flex flex-col items-center justify-center bg-white/10 rounded p-4">
+          <h2 className="text-xl mb-2">Recetas Compartidas</h2>
+          <h2 className="text-4xl text-gray-100">{myRecipes?.length ?? 0}</h2>
         </div>
       </div>
+
+      {/* Botón para enviar mensaje si no es tu perfil */}
       {!isOwnProfile && (
-        <div className="mx-10 mt-4">
+        <div className="mt-6 flex justify-start">
           <Button
             variant="contained"
             className="bg-green-600 text-white hover:bg-white hover:text-green-600 text-base h-10 flex items-center justify-center gap-2"
@@ -94,17 +102,23 @@ const UserProfile = () => {
           </Button>
         </div>
       )}
-      <p className="mx-10 mt-4 text-lg">{user?.description}</p>
-      {isCompanyAccount && (
-        <div className="mx-10 flex items-center mt-4">
-          <CallIcon className="text-xl mr-2" />
-          <p className="text-lg">{user?.phone_number}</p>
+
+      {/* Descripción del usuario */}
+      <p className="mt-6 text-lg">{user?.description}</p>
+
+      {/* Info de contacto si es empresa */}
+      {isCompanyAccount && user?.phone_number && (
+        <div className="mt-4 flex items-center gap-2">
+          <CallIcon className="text-xl" />
+          <p className="text-lg">{user.phone_number}</p>
         </div>
       )}
-      <div className="mx-10 mt-8">
+
+      {/* Tabs de publicaciones y favoritos */}
+      <div className="mt-8">
         <Tabs
           value={value}
-          onChange={(event: React.SyntheticEvent, newValue: number) => {
+          onChange={(_event: React.SyntheticEvent, newValue: number) => {
             setValue(newValue);
           }}
           className="text-gray-400 [&_.MuiTabs-indicator]:bg-gray-400"
@@ -118,18 +132,33 @@ const UserProfile = () => {
               myRecipes.map((item) => (
                 <ImageListItem
                   key={item._id}
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:opacity-90 transition"
                   onClick={() => navigate(`/recipe/${item._id}`)}
                 >
-                  <img
-                    className="rounded-lg"
-                    src={item.images[0]}
-                    alt={item.title}
-                  />
+                  <div className="flex flex-col items-center">
+                    {/* Asegura que todas las imágenes tengan el mismo tamaño */}
+                    <img
+                      className="rounded-lg w-40 h-40 object-cover" // Añade clases para dimensiones uniformes
+                      src={item.images[0]}
+                      alt={item.title}
+                    />
+                    <div className="flex w-full justify-between items-center mt-2">
+                      <p className="ml-2 text-sm">{item.title}</p>
+                      <div
+                        className="cursor-pointer mr-2"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          navigate(`/edit-recipe/${item._id}`);
+                        }}
+                      >
+                        <EditIcon className="text-2xl" />
+                      </div>
+                    </div>
+                  </div>
                 </ImageListItem>
               ))
             ) : (
-              <p>No se agregaron recetas</p>
+              <p>No se han agregado recetas</p>
             )}
           </div>
         </CustomTabPanel>
@@ -140,20 +169,21 @@ const UserProfile = () => {
                 myFavoriteRecipes.map(({ images, _id, title }) => (
                   <ImageListItem
                     key={_id}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:opacity-90 transition"
                     onClick={() => navigate(`/recipe/${_id}`)}
                   >
                     <img src={images[0]} alt={title} className="rounded-lg" />
                   </ImageListItem>
                 ))
               ) : (
-                <ImageListItem>
+                <div className="col-span-full flex flex-col items-center mt-4 gap-2">
                   <img
                     src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
                     alt="No images available"
-                    className="rounded-lg"
+                    className="rounded-lg w-32 h-32 object-cover"
                   />
-                </ImageListItem>
+                  <p className="text-center text-lg">No tienes favoritos aún</p>
+                </div>
               )}
             </div>
           </CustomTabPanel>

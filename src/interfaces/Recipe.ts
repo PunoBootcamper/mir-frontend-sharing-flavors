@@ -18,3 +18,11 @@ export interface IRecipeForm {
   category: string;
   image: File;
 }
+
+export interface IRecipeEditForm {
+  title: string;
+  ingredients: { ingredientsName: string }[];
+  procedure: { stepName: string }[];
+  category: string;
+  image?: File; // Aquí será la URL de la imagen existente
+}
