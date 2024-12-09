@@ -45,7 +45,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ onSubmit }) => {
 
   return (
     <div className="mt-4">
-      <h6 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+      <h6 className="text-lg font-semibold text-white mb-2">
         Añadir Comentario
       </h6>
       <form className="space-y-4" onSubmit={handleSubmit(onSubmitForm)}>

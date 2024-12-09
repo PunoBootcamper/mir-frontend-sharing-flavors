@@ -6,6 +6,7 @@ interface Props<T extends FieldValues> {
   type?: string;
   register: UseFormRegister<T>;
   error?: string;
+  placeholder?: string;
 }
 
 const FormField = <T extends FieldValues>({
@@ -14,9 +15,10 @@ const FormField = <T extends FieldValues>({
   type = "text",
   register,
   error,
+  placeholder,
 }: Props<T>) => {
   return (
-    <div className="flex flex-col gap-4 border p-2">
+    <div className="flex flex-col text-white">
       <label className="font-bold" htmlFor={id as string}>
         {label}
       </label>
@@ -24,17 +26,18 @@ const FormField = <T extends FieldValues>({
         <textarea
           id={id as string}
           {...register(id as Path<T>)}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md text-white"
         />
       ) : (
         <input
           type={type}
           id={id as string}
           {...register(id as Path<T>)}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md bg-gray-700 text-gray-300"
+          placeholder={placeholder}
         />
       )}
-      {error && <span className="text-red-500">{error}</span>}
+      {error && <span className="text-white text-sm">{error}</span>}
     </div>
   );
 };

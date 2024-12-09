@@ -52,8 +52,8 @@ const Dropzone: React.FC<DropzoneProps> = ({ onFileChange, existingImage }) => {
               />
             </svg>
             <p className="mb-2 text-sm text-gray-500">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
+              <span className="font-semibold">Subir imagen</span> o puedes
+              arrastrar la imagen
             </p>
             <p className="text-xs text-gray-500">
               SVG, PNG, JPG or GIF (MAX. 800x400px)

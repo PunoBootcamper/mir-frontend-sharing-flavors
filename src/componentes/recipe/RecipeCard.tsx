@@ -38,7 +38,7 @@ const RecipeCard: React.FC<Recipe> = ({
   };
 
   return (
-    <div className="w-full h-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="w-full h-auto max-w-sm border bg-gray-800 border-gray-700 rounded-lg shadow">
       {/* Imagen principal */}
       <div className="flex justify-center">
         <Link to={path} onClick={handleClicked} className="w-full">
@@ -55,9 +55,7 @@ const RecipeCard: React.FC<Recipe> = ({
         {/* Usuario */}
         <div className="flex items-center gap-4 mb-4">
           {isLoadingUser && (
-            <p className="text-gray-500 dark:text-gray-400">
-              Cargando usuario...
-            </p>
+            <p className="text-gray-400">Cargando usuario...</p>
           )}
           {errorUser && (
             <>
@@ -79,7 +77,7 @@ const RecipeCard: React.FC<Recipe> = ({
                 }}
               />
               <h5
-                className="text-md font-medium text-gray-900 dark:text-white"
+                className="text-md font-medium text-white"
                 onClick={() => {
                   navigate(`/profile/${user._id}`);
                 }}
@@ -92,7 +90,7 @@ const RecipeCard: React.FC<Recipe> = ({
 
         {/* Título */}
         <Link to={path} onClick={handleClicked}>
-          <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white line-clamp-1">
+          <h5 className="text-xl font-semibold tracking-tight text-white line-clamp-1">
             {title}
           </h5>
         </Link>
