@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store/store";
 import { logout } from "../../../app/store/authSlice";
@@ -12,6 +12,24 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="z-40 fixed w-full border-gray-200 bg-[#d12942]">
@@ -21,7 +39,7 @@ const Navbar: React.FC = () => {
         </Link>
 
         {user ? (
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <button
               type="button"
               className="flex items-center text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -71,7 +89,7 @@ const Navbar: React.FC = () => {
                       }}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
-                      Logout
+                      Cerrar sesión
                     </Link>
                   </li>
                 </ul>
