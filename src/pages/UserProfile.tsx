@@ -136,22 +136,25 @@ const UserProfile = () => {
                   onClick={() => navigate(`/recipe/${item._id}`)}
                 >
                   <div className="flex flex-col items-center">
-                    {/* Asegura que todas las imágenes tengan el mismo tamaño */}
+                    {/* Imagen con dimensiones uniformes */}
                     <img
-                      className="rounded-lg w-40 h-40 object-cover" // Añade clases para dimensiones uniformes
+                      className="rounded-lg w-40 h-40 object-cover"
                       src={item.images[0]}
                       alt={item.title}
                     />
-                    <div className="flex w-full justify-between items-center mt-2">
-                      <p className="ml-2 text-sm">{item.title}</p>
+                    {/* Contenedor con ancho fijo */}
+
+                    <div className="w-40 flex justify-between items-center mt-2">
+                      <p className="text-sm">{item.title}</p>
                       <div
-                        className="cursor-pointer mr-2"
+                        className="cursor-pointer"
                         onClick={(event) => {
                           event.stopPropagation();
                           navigate(`/edit-recipe/${item._id}`);
                         }}
                       >
-                        <EditIcon className="text-2xl" />
+                        {" "}
+                        {isOwnProfile && <EditIcon className="text-2xl" />}
                       </div>
                     </div>
                   </div>
