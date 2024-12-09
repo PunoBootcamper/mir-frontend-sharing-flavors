@@ -29,6 +29,7 @@ const Chat = () => {
   const [form, setForm] = useState<Partial<Message>>({ text: "" });
   const conversationRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const [activeUsers, setActiveUsers] = useState<string[]>([]);
 
   // Queries
   const { data: myChats = [] } = useGetChatsByUserIdQuery(userCredentials._id);
@@ -123,6 +124,17 @@ const Chat = () => {
     };
   }, [userCredentials._id, isUserScrolling]);
 
+  //Lista de usuarios activos
+  useEffect(() => {
+    socket.on("activeSessions", (users: Record<string, string>) => {
+      setActiveUsers(Object.keys(users));
+    });
+
+    return () => {
+      socket.off("activeSessions");
+    };
+  }, []);
+
   // Scroll automático al recibir mensajes
   useEffect(() => {
     if (!isUserScrolling) scrollToBottom(true);
@@ -176,7 +188,11 @@ const Chat = () => {
                 >
                   <p className="text-white font-medium">
                     {friendUser?.first_name} {friendUser?.last_name}{" "}
-                    <span className="text-green-500 text-sm">●</span>
+                    <span
+                      className={`text-sm ${activeUsers.includes(friendUser?._id || "") ? "text-green-500" : "text-gray-500"}`}
+                    >
+                      ●
+                    </span>
                   </p>
                 </div>
               );
