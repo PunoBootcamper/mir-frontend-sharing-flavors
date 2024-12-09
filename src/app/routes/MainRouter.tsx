@@ -1,5 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-import { Example, Home, Login, Register, Chat, UserProfile } from "../../pages";
+import {
+  Example,
+  Home,
+  Login,
+  Register,
+  Chat,
+  UserProfile,
+  EditRecipe,
+} from "../../pages";
 import AddRecipe from "../../pages/AddRecipe";
 import Recipe from "../../pages/Recipe";
 import NotFound from "../../pages/NotFound";
@@ -22,6 +30,7 @@ const MainRouter = () => {
           <Route path="/recipe/:id" element={<Recipe />} />
           <Route path="/home" element={<Home />} />
           <Route path="/add-recipe" element={<AddRecipe />} />
+          <Route path="/edit-recipe/:recipe_id" element={<EditRecipe />} />
         </Route>
         <Route path="/add-recipe" element={<AddRecipe />} />
         <Route path="/chats" element={<Chat />} />

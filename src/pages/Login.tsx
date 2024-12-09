@@ -10,11 +10,27 @@ import { loginSuccess } from "../app/store/authSlice";
 import MyButton from "../componentes/ui/Button/LoadingButton";
 import CommonButton from "../componentes/ui/Button/CommonButton";
 import { loginSchema } from "../utils/yupSchemas";
+import { useState } from "react";
+import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (
+    _event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const {
     control,
@@ -34,10 +50,11 @@ export default function Login() {
       const response = await login(data).unwrap();
 
       console.log("Respuesta:", response);
-
       dispatch(loginSuccess(response));
+      toast.success("Inicio de sesión exitoso");
       navigate("/home");
     } catch (error) {
+      setOpen(true);
       console.error("Error:", error);
       console.error("Los datos ingresados son incorrectos");
     }
@@ -119,6 +136,21 @@ export default function Login() {
           />
         </div>
       </form>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="warning"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Usuario o contraseña incorrecto
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

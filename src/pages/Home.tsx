@@ -11,6 +11,7 @@ export default function Home() {
   const parsedData = localStorageData ? JSON.parse(localStorageData) : null;
   const { text, result, onChangeInput } = useSearch({ data: recipes });
 
+
   return (
     <>
       <div className="w-full bg-[#d9c9a5] p-8">
@@ -18,14 +19,9 @@ export default function Home() {
       </div>
       <br />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 place-items-center justify-center">
+
         {result?.map((recipe) => {
-          //const isFavorite = !!dataLoggedUser?.favorites?.includes(recipe._id);
-          const isFavorite = !!parsedData.profile.favorites.includes(
-            recipe._id,
-          );
-          return (
-            <RecipeCard key={recipe._id} {...recipe} isFavorite={isFavorite} />
-          );
+          return <RecipeCard key={recipe._id} {...recipe} />
         })}
       </div>
 

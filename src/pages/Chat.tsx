@@ -13,7 +13,7 @@ import { Message, User, Chat as iChat } from "../interfaces/index";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const socket = io("http://localhost:3000");
+const socket = io(import.meta.env.VITE_API_URL);
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -112,7 +112,6 @@ const Chat = () => {
         console.error("Error al realizar refetch:", error);
       }
     }
-
     setFriendSelected(friend);
     setChatSelected(chat);
   };
@@ -160,8 +159,27 @@ const Chat = () => {
 
   // Formatear fecha
   const formatTime = (date: string) => {
-    const d = new Date(date);
-    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const messageDate = new Date(date);
+    const today = new Date();
+
+    // Verificar si la fecha del mensaje es hoy
+    const isToday =
+      messageDate.getDate() === today.getDate() &&
+      messageDate.getMonth() === today.getMonth() &&
+      messageDate.getFullYear() === today.getFullYear();
+
+    if (isToday) {
+      return messageDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } else {
+      return `${messageDate.getDate().toString().padStart(2, "0")}/${(
+        messageDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${messageDate.getFullYear().toString().slice(-2)}`;
+    }
   };
 
   const myChatsSorted = sortData(myChats);
