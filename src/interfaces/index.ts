@@ -4,3 +4,4 @@ export * from "./Comment";
 export * from "./Chat";
 export * from "./Message";
 export * from "./LoginResponse";
+export * from "./SearchParams";
