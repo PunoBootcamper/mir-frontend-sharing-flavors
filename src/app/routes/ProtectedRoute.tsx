@@ -23,8 +23,6 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     return <Navigate to="/access-denied" replace />;
   }
 
-  console.log("User is allowed to access this route");
-
   return <Outlet />;
 };
 

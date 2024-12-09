@@ -3,25 +3,46 @@ import { useImageLoader } from "../../hooks/useImageLoader";
 import { Link } from "react-router-dom";
 import Stars from "./Stars";
 import Views from "./Views";
-
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
+import { useUpdateRecipeMutation } from "../../app/apis/compartiendoSabores.api";
+import { useFavorite } from "../../hooks/useFavorite";
+import FavoriteIcon from "./FavoriteIcon";
 
-const RecipeCard: React.FC<Recipe> = ({
+interface RecipeCardProps extends Recipe {
+  isFavorite: boolean;
+}
+
+const RecipeCard: React.FC<RecipeCardProps> = ({
   title,
   images,
   views,
   average_rating,
   _id,
   user_id,
+  isFavorite,
 }) => {
   const imgURL = useImageLoader(images);
   const path = `/recipe/${_id}`;
+  const {
+    data: user,
+    error: errorUser,
+    isLoading: isLoadingUser,
+  } = useGetUserByIdQuery(user_id);
 
-  const { data: user, error, isLoading } = useGetUserByIdQuery(user_id);
-
+  const [updateRecipe] = useUpdateRecipeMutation();
+  //Actualizar las vistas de la receta
   const handleClicked = async () => {
-    console.log("Clicked");
+    try {
+      await updateRecipe({
+        _id: _id || "",
+        views: views + 1,
+      });
+    } catch (error) {
+      console.log("Error al actualizar las vistas de la receta", error);
+    }
   };
+
+  const { handleFavorite } = useFavorite();
 
   return (
     <div className="w-full h-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -40,12 +61,12 @@ const RecipeCard: React.FC<Recipe> = ({
       <div className="px-5 pb-5">
         {/* Usuario */}
         <div className="flex items-center gap-4 mb-4">
-          {isLoading && (
+          {isLoadingUser && (
             <p className="text-gray-500 dark:text-gray-400">
               Cargando usuario...
             </p>
           )}
-          {error && (
+          {errorUser && (
             <>
               <img
                 src={"https://via.placeholder.com/40"}
@@ -54,7 +75,7 @@ const RecipeCard: React.FC<Recipe> = ({
               />
             </>
           )}
-          {!isLoading && !error && user && (
+          {!isLoadingUser && !errorUser && user && (
             <>
               <img
                 src={user.photo_url || "https://via.placeholder.com/40"}
@@ -81,12 +102,11 @@ const RecipeCard: React.FC<Recipe> = ({
         {/* Vistas y botón de favoritos */}
         <div className="flex items-center justify-between">
           <Views views={views} />
-          <Link
-            to="#"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Favoritos
-          </Link>
+
+          <FavoriteIcon
+            isFavorite={isFavorite}
+            onClick={() => handleFavorite(_id, isFavorite)}
+          />
         </div>
       </div>
     </div>
