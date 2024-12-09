@@ -11,6 +11,7 @@ import { recipeSchema } from "../utils/yupSchemas";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../app/store/store";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const AddRecipe: React.FC = () => {
   const [createRecipe, { isLoading: loadingRecipe }] =
@@ -64,9 +65,11 @@ const AddRecipe: React.FC = () => {
       );
       console.log("Receta a enviar:", recipe);
       await createRecipe(recipe).unwrap();
+      toast.success("Receta publicada con éxito");
       navigate("/home");
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Error al publicar la receta");
     }
   };
 

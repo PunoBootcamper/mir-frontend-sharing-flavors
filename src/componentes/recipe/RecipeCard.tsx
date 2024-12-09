@@ -5,6 +5,7 @@ import Stars from "./Stars";
 import Views from "./Views";
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
 import { useUpdateRecipeMutation } from "../../app/apis/compartiendoSabores.api";
+import { useNavigate } from "react-router-dom";
 
 const RecipeCard: React.FC<Recipe> = ({
   title,
@@ -21,6 +22,7 @@ const RecipeCard: React.FC<Recipe> = ({
     error: errorUser,
     isLoading: isLoadingUser,
   } = useGetUserByIdQuery(user_id);
+  const navigate = useNavigate();
 
   const [updateRecipe] = useUpdateRecipeMutation();
   //Actualizar las vistas de la receta
@@ -67,16 +69,24 @@ const RecipeCard: React.FC<Recipe> = ({
             </>
           )}
           {!isLoadingUser && !errorUser && user && (
-            <>
+            <button>
               <img
                 src={user.photo_url || "https://via.placeholder.com/40"}
                 alt={`${user.first_name}'s avatar`}
-                className="w-10 h-10 rounded-full object-cover"
+                className="w-10 h-10 rounded-full object-cover focus:cursor-auto"
+                onClick={() => {
+                  navigate(`/profile/${user._id}`);
+                }}
               />
-              <h5 className="text-md font-medium text-gray-900 dark:text-white">
+              <h5
+                className="text-md font-medium text-gray-900 dark:text-white"
+                onClick={() => {
+                  navigate(`/profile/${user._id}`);
+                }}
+              >
                 {user.first_name} {user.last_name}
               </h5>
-            </>
+            </button>
           )}
         </div>
 
