@@ -136,15 +136,16 @@ const UserProfile = () => {
                   onClick={() => navigate(`/recipe/${item._id}`)}
                 >
                   <div className="flex flex-col items-center">
+                    {/* Asegura que todas las imágenes tengan el mismo tamaño */}
                     <img
-                      className="rounded-lg"
+                      className="rounded-lg w-40 h-40 object-cover" // Añade clases para dimensiones uniformes
                       src={item.images[0]}
                       alt={item.title}
                     />
                     <div className="flex w-full justify-between items-center mt-2">
-                      <p className="text-sm">{item.title}</p>
+                      <p className="ml-2 text-sm">{item.title}</p>
                       <div
-                        className="cursor-pointer"
+                        className="cursor-pointer mr-2"
                         onClick={(event) => {
                           event.stopPropagation();
                           navigate(`/edit-recipe/${item._id}`);
