@@ -119,7 +119,7 @@ const EditRecipe: React.FC = () => {
       <div className="flex justify-center min-h-screen">
         <div className="max-w-screen-md w-full md:mt-4 mx-auto p-4 bg-gray-800 shadow-md rounded-md">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <h2 className="text-2xl font-bold mb-4 text-center">
+            <h2 className="text-2xl font-bold mb-4 text-center text-white">
               Compartiendo sabores
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
