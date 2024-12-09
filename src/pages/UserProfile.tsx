@@ -175,7 +175,18 @@ const UserProfile = () => {
                     className="cursor-pointer hover:opacity-90 transition"
                     onClick={() => navigate(`/recipe/${_id}`)}
                   >
-                    <img src={images[0]} alt={title} className="rounded-lg" />
+                    <div className="flex flex-col items-center">
+                      {/* Imagen con dimensiones uniformes */}
+                      <img
+                        src={images[0]}
+                        alt={title}
+                        className="rounded-lg w-40 h-40 object-cover"
+                      />
+                      {/* Título o contenido adicional con ancho fijo */}
+                      <div className="w-40 mt-2 text-center">
+                        <p className="text-sm font-medium">{title}</p>
+                      </div>
+                    </div>
                   </ImageListItem>
                 ))
               ) : (
