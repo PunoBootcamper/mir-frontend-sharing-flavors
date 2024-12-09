@@ -5,21 +5,14 @@ import Stars from "./Stars";
 import Views from "./Views";
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
 import { useUpdateRecipeMutation } from "../../app/apis/compartiendoSabores.api";
-import { useFavorite } from "../../hooks/useFavorite";
-import FavoriteIcon from "./FavoriteIcon";
 
-interface RecipeCardProps extends Recipe {
-  isFavorite: boolean;
-}
-
-const RecipeCard: React.FC<RecipeCardProps> = ({
+const RecipeCard: React.FC<Recipe> = ({
   title,
   images,
   views,
   average_rating,
   _id,
   user_id,
-  isFavorite,
 }) => {
   const imgURL = useImageLoader(images);
   const path = `/recipe/${_id}`;
@@ -41,8 +34,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
       console.log("Error al actualizar las vistas de la receta", error);
     }
   };
-
-  const { handleFavorite } = useFavorite();
 
   return (
     <div className="w-full h-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -102,11 +93,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         {/* Vistas y botón de favoritos */}
         <div className="flex items-center justify-between">
           <Views views={views} />
-
-          <FavoriteIcon
-            isFavorite={isFavorite}
-            onClick={() => handleFavorite(_id, isFavorite)}
-          />
         </div>
       </div>
     </div>
