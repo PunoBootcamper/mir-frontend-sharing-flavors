@@ -28,7 +28,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
   const displayUser = userData || user;
 
   return (
-    <div className="flex items-center gap-4 p-4 border border-gray-300 rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600">
+    <div className="flex items-center gap-4 p-4 border rounded-md bg-gray-700 border-gray-600">
       {/* Foto de perfil */}
       {isLoading && (
         <div
@@ -53,10 +53,10 @@ const CommentCard: React.FC<CommentCardProps> = ({
 
       {/* Contenido del comentario */}
       <div className="flex-1">
-        <h6 className="font-semibold text-gray-900 dark:text-white">
+        <h6 className="font-semibold text-white">
           {displayUser?.first_name || "Usuario"} {displayUser?.last_name || ""}
         </h6>
-        <p className="text-gray-600 dark:text-gray-300">{comment}</p>
+        <p className="text-gray-300">{comment}</p>
         <Stars rating={rating} />
       </div>
     </div>

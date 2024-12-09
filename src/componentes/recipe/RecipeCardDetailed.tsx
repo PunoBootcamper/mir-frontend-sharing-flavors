@@ -60,7 +60,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   };
 
   return (
-    <div className="w-full bg-gray-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="w-full bg-gray-800 border rounded-lg shadow border-gray-700">
       {/* Encabezado */}
       <div className="flex flex-col sm:flex-row items-center justify-between p-5">
         {/* Vistas */}
@@ -70,7 +70,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
 
         {/* Título y Estrellas */}
         <div className="flex flex-col items-center text-center">
-          <h5 className="text-xl font-semibold text-gray-900 dark:text-white line-clamp-1">
+          <h5 className="text-xl font-semibold text-white line-clamp-1">
             {title}
           </h5>
           <Stars rating={average_rating} />
@@ -88,7 +88,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
           {/* Información del usuario */}
           <div className="w-full md:w-1/2">
             {isLoading && (
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-gray-400">
                 Cargando información del usuario...
               </p>
             )}
@@ -112,7 +112,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
                   className="w-10 h-10 rounded-full object-cover cursor-pointer"
                 />
                 <h5
-                  className="text-lg font-semibold text-gray-900 dark:text-white cursor-pointer"
+                  className="text-lg font-semibold text-white cursor-pointer"
                   onClick={() => {
                     navigate(`/profile/${user._id}`);
                   }}
@@ -121,7 +121,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
                 </h5>
               </div>
             )}
-            <ul className="space-y-1 list-disc list-inside text-gray-500 dark:text-white">
+            <ul className="space-y-1 list-disc list-inside text-white">
               {ingredients?.map((ingredient, index) => (
                 <li key={index}>{ingredient}</li>
               ))}
@@ -140,10 +140,10 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
 
         {/* Procedimiento */}
         <div className="mt-6">
-          <h5 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h5 className="text-xl font-semibold text-white mb-4">
             Procedimiento
           </h5>
-          <ol className="space-y-1 list-decimal list-inside text-gray-500 dark:text-white">
+          <ol className="space-y-1 list-decimal list-inside text-white">
             {procedure?.map((step, index) => <li key={index}>{step}</li>)}
           </ol>
         </div>

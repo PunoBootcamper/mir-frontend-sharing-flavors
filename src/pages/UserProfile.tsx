@@ -123,8 +123,22 @@ const UserProfile = () => {
           }}
           className="text-gray-400 [&_.MuiTabs-indicator]:bg-gray-400"
         >
-          <Tab label="Publicaciones" className="text-green-600" />
-          {isOwnProfile && <Tab label="Favoritos" className="text-red-600" />}
+          <Tab
+            label="Publicaciones"
+            sx={{
+              color: value === 1 ? "white" : "gray",
+              "&:hover": { color: "blue" },
+            }}
+          />
+          {isOwnProfile && (
+            <Tab
+              label="Favoritos"
+              sx={{
+                color: value === 1 ? "white" : "gray",
+                "&:hover": { color: "blue" },
+              }}
+            />
+          )}
         </Tabs>
         <CustomTabPanel value={value} index={0}>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-6">

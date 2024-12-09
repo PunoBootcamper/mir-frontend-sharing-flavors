@@ -32,17 +32,21 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="z-40 fixed w-full border-gray-200 bg-[#d12942]">
+    <nav className="z-40 fixed w-full border-gray-200 bg-secondary">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
         <Link to="/home" className="flex items-center">
           <img src="/logo.ico" className="h-14 w-14" alt="Logo" />
         </Link>
-
+        <div>
+          <h1 className="text-5xl font-cookie text-white">
+            Compartiendo Sabores
+          </h1>
+        </div>
         {user ? (
           <div className="relative" ref={dropdownRef}>
             <button
               type="button"
-              className="flex items-center text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+              className="flex items-center text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600"
               onClick={() => setDropdownOpen(!isDropdownOpen)}
             >
               <span className="sr-only">Open user menu</span>
@@ -53,12 +57,12 @@ const Navbar: React.FC = () => {
               />
             </button>
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+              <div className="absolute right-0 mt-2 w-48 divide-y rounded-lg shadow bg-gray-700 divide-gray-600">
                 <div className="px-4 py-3">
-                  <span className="block text-sm text-gray-900 dark:text-white">
+                  <span className="block text-sm text-white">
                     {user.profile.fullName || "User"}
                   </span>
-                  <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
+                  <span className="block text-sm truncate text-gray-400">
                     {user.profile.email || "email@example.com"}
                   </span>
                 </div>
@@ -66,7 +70,7 @@ const Navbar: React.FC = () => {
                   <li>
                     <Link
                       to="/chats"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600"
                     >
                       Chats
                     </Link>
@@ -74,7 +78,7 @@ const Navbar: React.FC = () => {
                   <li>
                     <Link
                       to="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600"
                     >
                       Perfil
                     </Link>
@@ -87,7 +91,7 @@ const Navbar: React.FC = () => {
                         dispatch(logout());
                         toast.success("Sesión cerrada");
                       }}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600"
                     >
                       Cerrar sesión
                     </Link>

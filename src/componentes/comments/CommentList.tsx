@@ -8,9 +8,7 @@ interface CommentsListProps {
 const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
   return (
     <div className="mt-6">
-      <h5 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-        Comentarios
-      </h5>
+      <h5 className="text-xl font-semibold text-white mb-4">Comentarios</h5>
       <div className="space-y-4">
         {comments.map((comment) => (
           <div key={comment._id}>

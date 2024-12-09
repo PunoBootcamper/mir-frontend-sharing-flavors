@@ -23,16 +23,13 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="block mb-2 text-sm font-medium text-gray-700 dark:text-white"
-      >
+      <label htmlFor={id} className="block mb-2 text-sm font-medium text-white">
         Comentario
       </label>
       <textarea
         id={id}
         rows={rows}
-        className="block w-full rounded-lg border border-gray-300 p-2.5 text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+        className="block w-full rounded-lg border p-2.5 bg-gray-700 text-white border-gray-600"
         placeholder={placeholder}
         onChange={handleChange}
         value={value}
