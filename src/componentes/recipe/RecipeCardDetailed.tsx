@@ -15,6 +15,7 @@ import { RootState } from "../../app/store/store";
 import { useSelector } from "react-redux";
 import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "./FavoriteIcon";
+import { useNavigate } from "react-router-dom";
 
 const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
@@ -27,6 +28,8 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   _id,
 }) => {
   const imgURL = useImageLoader(images);
+
+  const navigate = useNavigate();
 
   const loggedUser = useSelector((state: RootState) => state.auth.user);
 
@@ -102,10 +105,18 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
               <div className="flex items-center gap-4 mb-4">
                 <img
                   src={user.photo_url || "https://via.placeholder.com/40"}
+                  onClick={() => {
+                    navigate(`/profile/${user._id}`);
+                  }}
                   alt={`${user.first_name}'s avatar`}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-10 h-10 rounded-full object-cover cursor-pointer"
                 />
-                <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h5
+                  className="text-lg font-semibold text-gray-900 dark:text-white cursor-pointer"
+                  onClick={() => {
+                    navigate(`/profile/${user._id}`);
+                  }}
+                >
                   {user.first_name} {user.last_name}
                 </h5>
               </div>

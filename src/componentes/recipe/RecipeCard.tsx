@@ -73,7 +73,7 @@ const RecipeCard: React.FC<Recipe> = ({
               <img
                 src={user.photo_url || "https://via.placeholder.com/40"}
                 alt={`${user.first_name}'s avatar`}
-                className="w-10 h-10 rounded-full object-cover"
+                className="w-10 h-10 rounded-full object-cover focus:cursor-auto"
                 onClick={() => {
                   navigate(`/profile/${user._id}`);
                 }}
