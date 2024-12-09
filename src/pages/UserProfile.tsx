@@ -67,7 +67,7 @@ const UserProfile = () => {
 
       {/* Información principal del usuario */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] gap-8">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center justify-center">
           <Avatar
             className="border border-white w-36 h-36"
             alt={user?.first_name}
