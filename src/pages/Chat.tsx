@@ -36,6 +36,7 @@ const Chat = () => {
   const { data: users = [] } = useGetUsersQuery();
   const { data: myMessages = [], refetch } = useGetMessagesByChatIdQuery(
     chatSelected?._id || "",
+    { skip: !chatSelected?._id },
   );
   const [createMessage] = useCreateMessageMutation();
 
@@ -103,9 +104,15 @@ const Chat = () => {
 
   // Abrir un chat
   const handleOpenChat = async (friend: User, chat: iChat) => {
+    if (!chat?._id) {
+      try {
+        await refetch();
+      } catch (error) {
+        console.error("Error al realizar refetch:", error);
+      }
+    }
     setFriendSelected(friend);
     setChatSelected(chat);
-    await refetch();
   };
 
   // Manejo de eventos de socket
