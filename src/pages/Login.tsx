@@ -13,6 +13,7 @@ import { loginSchema } from "../utils/yupSchemas";
 import { useState } from "react";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Login() {
   const [open, setOpen] = useState(false);
 
   const handleClose = (
-    event: React.SyntheticEvent | Event,
+    _event: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason,
   ) => {
     if (reason === "clickaway") {
@@ -50,7 +51,7 @@ export default function Login() {
 
       console.log("Respuesta:", response);
       dispatch(loginSuccess(response));
-
+      toast.success("Inicio de sesión exitoso");
       navigate("/home");
     } catch (error) {
       setOpen(true);

@@ -6,6 +6,7 @@ import { User } from "../interfaces/User";
 import { useCreateUserMutation } from "../app/apis/compartiendoSabores.api";
 import MyButton from "../componentes/ui/Button/LoadingButton";
 import { registerSchema } from "../utils/yupSchemas";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -29,8 +30,10 @@ export default function Register() {
     try {
       data.role = "USER";
       await createUser(data).unwrap();
+      toast.success("Usuario creado exitosamente");
       navigate("/login");
     } catch (error) {
+      toast.error("Error al crear el usuario");
       console.error("Error:", error);
     }
   };

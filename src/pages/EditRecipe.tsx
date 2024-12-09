@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useGetRecipeByIdQuery } from "../app/apis/compartiendoSabores.api";
 import { transformIRecipeEditFormToRecipe } from "../utils/recipeUtils";
+import { toast } from "react-toastify";
 
 const EditRecipe: React.FC = () => {
   const [updateRecipe, { isLoading: updatingRecipe }] =
@@ -50,7 +51,6 @@ const EditRecipe: React.FC = () => {
   });
   useEffect(() => {
     if (recipe && !isLoading) {
-      // O cargar uno específico
       reset({
         title: recipe.title,
         category: recipe.category,
@@ -59,11 +59,10 @@ const EditRecipe: React.FC = () => {
         })),
         procedure: recipe.procedure.map((step) => ({ stepName: step })),
       });
-      console.log("Receta cargada:", recipe);
     }
 
     if (isError) {
-      console.log("Error al cargar la receta");
+      toast.error("Error al cargar la receta");
       navigate("/home");
     }
   }, [recipe, isLoading, reset, isError, navigate]);
@@ -80,17 +79,10 @@ const EditRecipe: React.FC = () => {
 
   const onSubmit = async (data: IRecipeEditForm) => {
     try {
-      console.log("ID del creador:", user?._id);
-      console.log("Datos recibidos:", data);
-
-      let imageUrl = recipe?.images[0]; // Mantener la imagen existente por defecto
+      let imageUrl = recipe?.images[0];
 
       if (data.image) {
-        console.log("Subiendo imagen...");
-        imageUrl = await uploadImage(data.image); // Actualizar URL si hay una nueva imagen
-        console.log("Imagen subida:", imageUrl);
-      } else {
-        console.log("No se subió imagen, manteniendo la existente:", imageUrl);
+        imageUrl = await uploadImage(data.image);
       }
 
       const updatedRecipe = transformIRecipeEditFormToRecipe(
@@ -99,14 +91,11 @@ const EditRecipe: React.FC = () => {
         imageUrl,
       );
 
-      console.log("Receta a actualizar:", updatedRecipe);
-
-      // Llama a updateRecipe
       await updateRecipe({ _id: recipe_id, ...updatedRecipe }).unwrap();
-
-      console.log("Receta actualizada correctamente.");
+      toast.success("Receta actualizada con éxito");
       navigate("/home");
     } catch (error) {
+      toast.error("Error al actualizar la receta");
       console.error("Error al actualizar la receta:", error);
     }
   };
