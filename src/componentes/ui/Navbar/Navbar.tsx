@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
                 <ul className="py-2">
                   <li>
                     <Link
-                      to="chats"
+                      to="/chats"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
                       Chats
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
                   </li>
                   <li>
                     <Link
-                      to="profile"
+                      to="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
                       Perfil
