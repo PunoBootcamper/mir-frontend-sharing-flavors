@@ -259,16 +259,25 @@ const EditRecipe: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <button
-                type="submit"
-                className="fixed bottom-8 right-8 bg-secondary hover:bg-[#b02036] text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
-              >
-                {loadingImg
-                  ? "Cargando imagen..."
-                  : updatingRecipe
-                    ? "Actualizando receta..."
-                    : "Actualizar receta"}
-              </button>
+              <div className="mb-4 fixed bottom-8 right-8 flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => navigate("/profile")}
+                  className="bg-blue-400 hover:bg-blue-500 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-secondary hover:bg-[#b02036] text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300"
+                >
+                  {loadingImg
+                    ? "Cargando imagen..."
+                    : updatingRecipe
+                      ? "Actualizando receta..."
+                      : "Actualizar receta"}
+                </button>
+              </div>
             </div>
           </form>
         </div>
