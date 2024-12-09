@@ -67,3 +67,43 @@ export const recipeSchema = yup.object().shape({
           )),
     ),
 });
+
+export const EditRecipeSchema = yup.object().shape({
+  title: yup
+    .string()
+    .required("El título es obligatorio")
+    .min(3, "El título debe tener al menos 3 caracteres"),
+  ingredients: yup
+    .array()
+    .of(
+      yup.object({
+        ingredientsName: yup
+          .string()
+          .required("Cada ingrediente es obligatorio"),
+      }),
+    )
+    .min(1, "Debe haber al menos un ingrediente")
+    .required("Los ingredientes son obligatorios"),
+  procedure: yup
+    .array()
+    .of(
+      yup.object({
+        stepName: yup.string().required("Cada paso es obligatorio"),
+      }),
+    )
+    .min(1, "Debe haber al menos un paso")
+    .required("Los pasos son obligatorios"),
+  category: yup.string().required("La categoría es obligatoria"),
+  image: yup
+    .mixed<File>()
+    .test(
+      "fileType",
+      "Solo se permiten imágenes (jpeg, png, gif)",
+      (value) =>
+        !value ||
+        (value &&
+          ["image/jpeg", "image/png", "image/gif"].includes(
+            (value as File).type,
+          )),
+    ), // Campo auxiliar para manejar imágenes existentes
+});

@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface DropzoneProps {
   onFileChange: (file: File | null) => void;
+  existingImage?: string; // Nueva prop para la imagen existente
 }
 
-const Dropzone: React.FC<DropzoneProps> = ({ onFileChange }) => {
+const Dropzone: React.FC<DropzoneProps> = ({ onFileChange, existingImage }) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (existingImage) {
+      setPreviewImage(existingImage); // Establece la imagen existente como vista previa inicial
+    }
+  }, [existingImage]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
 
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      setPreviewImage(imageURL); // Set the preview image URL
+      setPreviewImage(imageURL); // Actualiza la vista previa con la nueva imagen
     }
 
     onFileChange(file);
