@@ -7,10 +7,7 @@ import { SearchBar } from "../componentes/searchBar/SearchBar";
 export default function Home() {
   const { data: recipes } = useGetRecipesQuery();
 
-  const localStorageData = localStorage.getItem("user");
-  const parsedData = localStorageData ? JSON.parse(localStorageData) : null;
   const { text, result, onChangeInput } = useSearch({ data: recipes });
-
 
   return (
     <>
@@ -19,9 +16,8 @@ export default function Home() {
       </div>
       <br />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 place-items-center justify-center">
-
         {result?.map((recipe) => {
-          return <RecipeCard key={recipe._id} {...recipe} />
+          return <RecipeCard key={recipe._id} {...recipe} />;
         })}
       </div>
 
