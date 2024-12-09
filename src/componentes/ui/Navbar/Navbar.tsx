@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store/store";
 import { logout } from "../../../app/store/authSlice";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import CommonButton from "../Button/CommonButton";
 
 const Navbar: React.FC = () => {
@@ -66,6 +67,7 @@ const Navbar: React.FC = () => {
                       onClick={() => {
                         setDropdownOpen(false);
                         dispatch(logout());
+                        toast.success("Sesión cerrada");
                       }}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                     >
