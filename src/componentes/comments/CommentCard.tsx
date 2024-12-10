@@ -1,6 +1,7 @@
 import Stars from "../recipe/Stars";
 import { Comment } from "../../interfaces";
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
+import { formatDate } from "../../utils/recipeUtils";
 
 interface CommentCardProps extends Partial<Comment> {
   userData?: {
@@ -15,6 +16,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
   user_id,
   rating = 0,
   userData,
+  createdAt,
 }) => {
   // Solo consulta el usuario si no se pasa `userData`
   const {
@@ -59,6 +61,11 @@ const CommentCard: React.FC<CommentCardProps> = ({
         <p className="text-gray-300">{comment}</p>
         <Stars rating={rating} />
       </div>
+
+      {/* Fecha de creación */}
+      <span className="text-xs text-gray-400">
+        {createdAt ? formatDate(createdAt) : "Fecha desconocida"}
+      </span>
     </div>
   );
 };

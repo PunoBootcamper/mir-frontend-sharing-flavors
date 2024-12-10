@@ -5,6 +5,7 @@ export interface Comment {
   rating: number;
   comment: string;
   __v: number;
+  createdAt: string;
 }
 
 export interface CommentWithAvatar extends Comment {

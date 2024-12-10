@@ -9,6 +9,7 @@ export interface Recipe {
   average_rating: number;
   views: number;
   __v: number;
+  createdAt: string;
 }
 
 export interface IRecipeForm {

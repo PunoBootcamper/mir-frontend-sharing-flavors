@@ -17,6 +17,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
               rating={comment.rating}
               user_id={comment.user_id}
               recipe_id={comment.recipe_id}
+              createdAt={comment.createdAt}
             />
           </div>
         ))}
