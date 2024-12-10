@@ -46,17 +46,14 @@ export default function Login() {
 
   const onSubmit = async (data: UserCredentials) => {
     try {
-      console.log("Datos enviados:", data);
       const response = await login(data).unwrap();
 
-      console.log("Respuesta:", response);
       dispatch(loginSuccess(response));
       toast.success("Inicio de sesión exitoso");
       navigate("/home");
     } catch (error) {
       setOpen(true);
       console.error("Error:", error);
-      console.error("Los datos ingresados son incorrectos");
     }
   };
 

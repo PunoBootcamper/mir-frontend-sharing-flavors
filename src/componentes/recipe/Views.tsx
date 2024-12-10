@@ -3,7 +3,7 @@ interface ViewsProps {
 }
 
 const Views = ({ views }: ViewsProps) => {
-  const viewsAsString: string = views === 0 ? "--" : views.toString();
+  const viewsAsString: string = views === 0 ? "-" : views.toString();
 
   return (
     <div className="flex items-center">
