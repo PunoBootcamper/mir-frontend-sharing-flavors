@@ -77,6 +77,55 @@ export const compartiendoSaboresApi = createApi({
         method: "POST",
         body,
       }),
+      async onQueryStarted(newRecipe, { dispatch, queryFulfilled }) {
+        // Actualización optimista
+        const patchResult = dispatch(
+          compartiendoSaboresApi.util.updateQueryData(
+            "getRecipes",
+            undefined, // No requiere parámetros
+            (draft) => {
+              // Agrega la nueva receta al inicio de la lista
+              draft.unshift({
+                _id: Math.random().toString(), // ID temporal
+                user_id: newRecipe.user_id || "",
+                title: newRecipe.title || "Nueva receta",
+                ingredients: newRecipe.ingredients || [],
+                procedure: newRecipe.procedure || [],
+                images: newRecipe.images || [],
+                category: newRecipe.category || "Sin categoría",
+                average_rating: 0, // Valor por defecto
+                views: 0, // Valor por defecto
+                __v: 0, // Versión inicial
+                createdAt: new Date().toISOString(),
+              });
+            },
+          ),
+        );
+
+        try {
+          // Espera la confirmación de la API
+          const { data: createdRecipe } = await queryFulfilled;
+
+          // Reemplaza el ID temporal con el ID real devuelto por la API
+          dispatch(
+            compartiendoSaboresApi.util.updateQueryData(
+              "getRecipes",
+              undefined,
+              (draft) => {
+                const index = draft.findIndex(
+                  (recipe) => recipe._id === newRecipe._id,
+                );
+                if (index !== -1) {
+                  draft[index] = createdRecipe;
+                }
+              },
+            ),
+          );
+        } catch {
+          // Revierte los cambios locales si la API falla
+          patchResult.undo();
+        }
+      },
     }),
     getRecipes: builder.query<Recipe[], void>({
       query: () => "api/recipe/",
@@ -176,13 +225,14 @@ export const compartiendoSaboresApi = createApi({
             "getComments",
             recipe_id || "",
             (draft) => {
-              draft.push({
+              draft.unshift({
                 _id: Math.random().toString(), // ID temporal
                 user_id: newComment.user_id || "", // Aseguramos que exista un user_id
                 recipe_id: recipe_id || "", // Asociamos al recipe_id
                 rating: newComment.rating || 0, // Valor predeterminado si no está presente
                 comment: newComment.comment || "Comentario temporal", // Texto predeterminado
                 __v: 0, // Valor inicial para versiones
+                createdAt: new Date().toISOString(),
               });
             },
           ),

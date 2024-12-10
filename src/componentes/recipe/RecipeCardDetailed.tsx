@@ -10,6 +10,7 @@ import {
   useGetCommentsQuery,
   useGetUserByIdQuery,
   useCreateCommentMutation,
+  useUpdateRecipeMutation,
 } from "../../app/apis/compartiendoSabores.api";
 import { RootState } from "../../app/store/store";
 import { useSelector } from "react-redux";
@@ -21,7 +22,6 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
   images,
   views = 0,
-  average_rating = 0,
   user_id,
   ingredients,
   procedure,
@@ -30,6 +30,8 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   const imgURL = useImageLoader(images);
 
   const navigate = useNavigate();
+
+  const [updateRecipe] = useUpdateRecipeMutation();
 
   const loggedUser = useSelector((state: RootState) => state.auth.user);
 
@@ -45,6 +47,14 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   const { data: comments } = useGetCommentsQuery(_id ?? "");
   const { data: user, error, isLoading } = useGetUserByIdQuery(user_id ?? "");
 
+  const averageRating = comments?.reduce((acc, comment, index, array) => {
+    acc += comment.rating;
+    if (index === array.length - 1) {
+      return acc / array.length;
+    }
+    return acc;
+  }, 0);
+
   const handleSubmittedComment = async (rating: number, comment: string) => {
     try {
       const newComment: Partial<Comment> = {
@@ -53,7 +63,16 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
         rating,
         comment,
       };
+
       await createComment(newComment);
+
+      const currentAverage = averageRating ?? 0;
+      const currentCount = comments?.length ?? 0;
+
+      const newAverageRating =
+        (currentAverage * currentCount + rating) / (currentCount + 1);
+
+      await updateRecipe({ _id, average_rating: newAverageRating });
     } catch (error) {
       console.log("Error al enviar el comentario", error);
     }
@@ -73,7 +92,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
           <h5 className="text-xl font-semibold text-white line-clamp-1">
             {title}
           </h5>
-          <Stars rating={average_rating} />
+          <Stars rating={averageRating || 0} />
         </div>
 
         <FavoriteIcon
@@ -149,8 +168,8 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
         </div>
 
         {/* Comentarios */}
-        <CommentsList comments={comments ?? []} />
         <CommentForm onSubmit={handleSubmittedComment} />
+        <CommentsList comments={comments ?? []} />
       </div>
     </div>
   );

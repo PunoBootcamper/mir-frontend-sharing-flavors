@@ -6,7 +6,7 @@ import Views from "./Views";
 import { useGetUserByIdQuery } from "../../app/apis/compartiendoSabores.api";
 import { useUpdateRecipeMutation } from "../../app/apis/compartiendoSabores.api";
 import { useNavigate } from "react-router-dom";
-
+import { formatDate } from "../../utils/recipeUtils";
 const RecipeCard: React.FC<Recipe> = ({
   title,
   images,
@@ -14,6 +14,7 @@ const RecipeCard: React.FC<Recipe> = ({
   average_rating,
   _id,
   user_id,
+  createdAt,
 }) => {
   const imgURL = useImageLoader(images);
   const path = `/recipe/${_id}`;
@@ -101,6 +102,9 @@ const RecipeCard: React.FC<Recipe> = ({
         {/* Vistas y botón de favoritos */}
         <div className="flex items-center justify-between">
           <Views views={views} />
+          <p className="text-sm text-gray-400 text-right">
+            {formatDate(createdAt)}
+          </p>
         </div>
       </div>
     </div>
