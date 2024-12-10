@@ -2,6 +2,8 @@
 
 ¡Bienvenido al proyecto **Compartiendo Sabores**! Esta es una plataforma donde los amantes de la cocina pueden compartir recetas, descubrir nuevos platos y conectarse con otros entusiastas culinarios.
 
+- **Link de proyecto:** https://compartiendosabores.netlify.app/
+
 ---
 
 ## Características
@@ -95,10 +97,26 @@ Las contribuciones son bienvenidas. Por favor, sigue las pautas establecidas y m
 
 ¡Gracias por ser parte de Compartiendo Sabores! Si tienes preguntas o sugerencias, no dudes en contactarnos.
 
-## Imagenes
+## Funcionalides implementadas
+
+- **Registro de usuarios**: Permite a los nuevos usuarios crear una cuenta en la plataforma.
+  ![alt text](img/image.png)
+- **Login**: Autentica a los usuarios existentes para acceder a sus cuentas.
+  ![alt text](img/image-0.png)
+- **Home**: Página principal que muestra las recetas más recientes.
+  ![alt text](img/image-1.png)
+- **Comentarios**: Los usuarios pueden dejar comentarios en las recetas.
+  ![alt text](img/image-2.png)
+- **Publicar receta**: Los usuarios pueden crear y compartir nuevas recetas.
+  ![alt text](img/image-3.png)
+- **Editar receta**: Los usuarios pueden modificar sus recetas publicadas.
+  ![alt text](img/image-4.png)
+- **Chat**: Comunicación en tiempo real entre los usuarios.
+  ![alt text](img/image-5.png)
+- **Edición de perfil**
+  ![alt text](img/image-6.png)
 
 ## Autores
 
 - GitHub - [William Lupaca Ticona](https://github.com/PunoBootcamper)
 - Github - [Gabriel Steven Machicao Quispe](https://github.com/gabriel7529)
-- GitHub - [David Paredes Abanto](https://github.com/davichano)
