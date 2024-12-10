@@ -13,7 +13,7 @@ import {
 
 export const compartiendoSaboresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
-  tagTypes: ["Recipe"],
+  tagTypes: ["Recipe", "Recipes"],
   endpoints: (builder) => ({
     /*end points user  */
     getUsers: builder.query<User[], void>({
@@ -77,60 +77,12 @@ export const compartiendoSaboresApi = createApi({
         method: "POST",
         body,
       }),
-      async onQueryStarted(newRecipe, { dispatch, queryFulfilled }) {
-        const tempId = Math.random().toString(); // Genera un ID temporal
-
-        // Actualización optimista
-        const patchResult = dispatch(
-          compartiendoSaboresApi.util.updateQueryData(
-            "getRecipes",
-            undefined, // No requiere parámetros
-            (draft) => {
-              draft.unshift({
-                _id: tempId, // Usar el ID temporal
-                user_id: newRecipe.user_id || "",
-                title: newRecipe.title || "Nueva receta",
-                ingredients: newRecipe.ingredients || [],
-                procedure: newRecipe.procedure || [],
-                images: newRecipe.images || [],
-                category: newRecipe.category || "Sin categoría",
-                average_rating: 0, // Valor por defecto
-                views: 0, // Valor por defecto
-                __v: 0, // Versión inicial
-                createdAt: new Date().toISOString(),
-              });
-            },
-          ),
-        );
-
-        try {
-          // Espera la confirmación de la API
-          const { data: createdRecipe } = await queryFulfilled;
-
-          // Reemplaza el ID temporal con el ID real devuelto por la API
-          dispatch(
-            compartiendoSaboresApi.util.updateQueryData(
-              "getRecipes",
-              undefined,
-              (draft) => {
-                const index = draft.findIndex(
-                  (recipe) => recipe._id === tempId,
-                ); // Busca por el ID temporal
-                if (index !== -1) {
-                  draft[index] = createdRecipe; // Reemplaza con la receta real devuelta por la API
-                }
-              },
-            ),
-          );
-        } catch {
-          // Revierte los cambios locales si la API falla
-          patchResult.undo();
-        }
-      },
+      invalidatesTags: ["Recipes"],
     }),
 
     getRecipes: builder.query<Recipe[], void>({
       query: () => "api/recipe/",
+      providesTags: ["Recipes"],
     }),
     updateRecipe: builder.mutation<Recipe, Partial<Recipe>>({
       query: (recipe) => {
