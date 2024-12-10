@@ -48,6 +48,19 @@ const EditProfile = () => {
 
     try {
       await updateUser({ ...form, _id: userCredentials._id }).unwrap();
+
+      if (isUserAuthenticated) {
+        console.log(isUserAuthenticated);
+        const userObject = JSON.parse(isUserAuthenticated);
+
+        userObject.profile = userObject.profile || {};
+        userObject.profile.avatar = form.photo_url || userObject.profile.avatar;
+        userObject.profile.last_name = form.last_name;
+
+        localStorage.setItem("user", JSON.stringify(userObject));
+      }
+
+      console.log(isUserAuthenticated);
       navigate("/home");
     } catch (error) {
       setErrorMessage("Hubo un error al guardar los datos.");
