@@ -6,7 +6,7 @@ const Stars = ({ rating }: StarsProps) => {
   const roundedRating = Math.round(rating * 10) / 10;
 
   return (
-    <div className="flex items-center mt-2.5 mb-5">
+    <div className="flex items-center mt-2.5 mb-2">
       <div className="flex items-center space-x-1 rtl:space-x-reverse">
         {[...Array(5)].map((_, index) => (
           <svg

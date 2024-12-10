@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "./FavoriteIcon";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../utils/recipeUtils";
 
 const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   title,
@@ -26,6 +27,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
   ingredients,
   procedure,
   _id,
+  createdAt,
 }) => {
   const imgURL = useImageLoader(images);
 
@@ -93,6 +95,9 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
             {title}
           </h5>
           <Stars rating={averageRating || 0} />
+          <p className="text-sm text-gray-400 text-right">
+            {createdAt && formatDate(createdAt)}
+          </p>
         </div>
 
         <FavoriteIcon
@@ -105,6 +110,7 @@ const RecipeCardDetailed: React.FC<Partial<Recipe>> = ({
       <div className="p-4">
         <div className="flex flex-col md:flex-row items-start gap-4">
           {/* Información del usuario */}
+
           <div className="w-full md:w-1/2">
             {isLoading && (
               <p className="text-gray-400">
