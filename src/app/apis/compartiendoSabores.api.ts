@@ -78,15 +78,16 @@ export const compartiendoSaboresApi = createApi({
         body,
       }),
       async onQueryStarted(newRecipe, { dispatch, queryFulfilled }) {
+        const tempId = Math.random().toString(); // Genera un ID temporal
+
         // Actualización optimista
         const patchResult = dispatch(
           compartiendoSaboresApi.util.updateQueryData(
             "getRecipes",
             undefined, // No requiere parámetros
             (draft) => {
-              // Agrega la nueva receta al inicio de la lista
               draft.unshift({
-                _id: Math.random().toString(), // ID temporal
+                _id: tempId, // Usar el ID temporal
                 user_id: newRecipe.user_id || "",
                 title: newRecipe.title || "Nueva receta",
                 ingredients: newRecipe.ingredients || [],
@@ -113,10 +114,10 @@ export const compartiendoSaboresApi = createApi({
               undefined,
               (draft) => {
                 const index = draft.findIndex(
-                  (recipe) => recipe._id === newRecipe._id,
-                );
+                  (recipe) => recipe._id === tempId,
+                ); // Busca por el ID temporal
                 if (index !== -1) {
-                  draft[index] = createdRecipe;
+                  draft[index] = createdRecipe; // Reemplaza con la receta real devuelta por la API
                 }
               },
             ),
@@ -127,6 +128,7 @@ export const compartiendoSaboresApi = createApi({
         }
       },
     }),
+
     getRecipes: builder.query<Recipe[], void>({
       query: () => "api/recipe/",
     }),
