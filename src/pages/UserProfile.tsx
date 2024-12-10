@@ -157,18 +157,18 @@ const UserProfile = () => {
                       alt={item.title}
                     />
                     {/* Contenedor con ancho fijo */}
-
-                    <div className="w-40 flex justify-between items-center mt-2">
-                      <p className="text-sm">{item.title}</p>
-                      <div
-                        className="cursor-pointer"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          navigate(`/edit-recipe/${item._id}`);
-                        }}
-                      >
-                        {" "}
-                        {isOwnProfile && <EditIcon className="text-2xl" />}
+                    <div className="w-40 mt-2">
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm truncate">{item.title}</p>
+                        <div
+                          className="cursor-pointer"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            navigate(`/edit-recipe/${item._id}`);
+                          }}
+                        >
+                          {isOwnProfile && <EditIcon className="text-2xl" />}
+                        </div>
                       </div>
                     </div>
                   </div>
